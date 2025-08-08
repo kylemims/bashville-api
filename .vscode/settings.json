@@ -5,5 +5,27 @@
         "--django-settings-module=bangazon.settings",
         "--max-line-length=120"
     ],
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground": "#6ed6ba",
+        "activityBar.background": "#6ed6ba",
+        "activityBar.foreground": "#15202b",
+        "activityBar.inactiveForeground": "#15202b99",
+        "activityBarBadge.background": "#ac51ce",
+        "activityBarBadge.foreground": "#e7e7e7",
+        "commandCenter.border": "#15202b99",
+        "sash.hoverBorder": "#6ed6ba",
+        "statusBar.background": "#46cba7",
+        "statusBar.foreground": "#15202b",
+        "statusBarItem.hoverBackground": "#31ad8c",
+        "statusBarItem.remoteBackground": "#46cba7",
+        "statusBarItem.remoteForeground": "#15202b",
+        "titleBar.activeBackground": "#46cba7",
+        "titleBar.activeForeground": "#15202b",
+        "titleBar.inactiveBackground": "#46cba799",
+        "titleBar.inactiveForeground": "#15202b99"
+    },
+    "peacock.color": "#46cba7",
+    "python-envs.defaultEnvManager": "ms-python.python:system",
+    "python-envs.pythonProjects": [],
 }
 
