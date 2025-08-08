@@ -1,0 +1,38 @@
+[
+  {
+    "model": "bashvilleapi.colorpalette",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "name": "Midnight Vibes",
+      "primary_hex": "#0F172A",
+      "secondary_hex": "#1E293B",
+      "accent_hex": "#38BDF8",
+      "background_hex": "#F8FAFC"
+    }
+  },
+  {
+    "model": "bashvilleapi.colorpalette",
+    "pk": 2,
+    "fields": {
+      "user": 1,
+      "name": "Sundown Glow",
+      "primary_hex": "#F97316",
+      "secondary_hex": "#FDBA74",
+      "accent_hex": "#7C3AED",
+      "background_hex": "#FFF7ED"
+    }
+  },
+  {
+    "model": "bashvilleapi.colorpalette",
+    "pk": 3,
+    "fields": {
+      "user": 1,
+      "name": "Soft Noir",
+      "primary_hex": "#18181B",
+      "secondary_hex": "#3F3F46",
+      "accent_hex": "#E4E4E7",
+      "background_hex": "#FFFFFF"
+    }
+  }
+]
