@@ -7,11 +7,9 @@ class ColorPaletteSerializer(serializers.ModelSerializer):
         model = ColorPalette
         fields = [
             "id",
-            "user",
             "name",
             "primary_hex",
             "secondary_hex",
             "accent_hex",
             "background_hex",
         ]
-        depth = 1
