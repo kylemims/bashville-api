@@ -1,0 +1,46 @@
+[
+  {
+    "model": "bashvilleapi.project",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "title": "Portfolio Website",
+      "description": "Personal portfolio built with React and Tailwind CSS",
+      "color_palette": 1,
+      "created_at": "2025-08-11T10:00:00Z"
+    }
+  },
+  {
+    "model": "bashvilleapi.project",
+    "pk": 2,
+    "fields": {
+      "user": 1,
+      "title": "E-commerce Dashboard",
+      "description": "Admin dashboard for managing online store inventory",
+      "color_palette": 2,
+      "created_at": "2025-08-11T09:00:00Z"
+    }
+  },
+  {
+    "model": "bashvilleapi.project",
+    "pk": 3,
+    "fields": {
+      "user": 1,
+      "title": "Task Manager App",
+      "description": "Simple to-do list application with drag and drop",
+      "color_palette": 3,
+      "created_at": "2025-08-11T08:00:00Z"
+    }
+  },
+  {
+    "model": "bashvilleapi.project",
+    "pk": 4,
+    "fields": {
+      "user": 1,
+      "title": "Weather App",
+      "description": "Real-time weather updates with beautiful animations",
+      "color_palette": null,
+      "created_at": "2025-08-11T07:00:00Z"
+    }
+  }
+]

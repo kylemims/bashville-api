@@ -34,5 +34,113 @@
       "accent_hex": "#E4E4E7",
       "background_hex": "#FFFFFF"
     }
+  },
+  {
+    "model": "bashvilleapi.colorpalette",
+    "pk": 4,
+    "fields": {
+      "user": 1,
+      "name": "Ocean Breeze",
+      "primary_hex": "#0EA5E9",
+      "secondary_hex": "#0369A1",
+      "accent_hex": "#F0F9FF",
+      "background_hex": "#FAFBFC"
+    }
+  },
+  {
+    "model": "bashvilleapi.colorpalette",
+    "pk": 5,
+    "fields": {
+      "user": 1,
+      "name": "Forest Green",
+      "primary_hex": "#15803D",
+      "secondary_hex": "#166534",
+      "accent_hex": "#BBF7D0",
+      "background_hex": "#F7FEF7"
+    }
+  },
+  {
+    "model": "bashvilleapi.colorpalette",
+    "pk": 6,
+    "fields": {
+      "user": 1,
+      "name": "Cherry Blossom",
+      "primary_hex": "#E11D48",
+      "secondary_hex": "#BE185D",
+      "accent_hex": "#FECACA",
+      "background_hex": "#FFFBFB"
+    }
+  },
+  {
+    "model": "bashvilleapi.colorpalette",
+    "pk": 7,
+    "fields": {
+      "user": 1,
+      "name": "Arctic Frost",
+      "primary_hex": "#0F766E",
+      "secondary_hex": "#134E4A",
+      "accent_hex": "#A7F3D0",
+      "background_hex": "#F0FDFA"
+    }
+  },
+  {
+    "model": "bashvilleapi.colorpalette",
+    "pk": 8,
+    "fields": {
+      "user": 1,
+      "name": "Warm Amber",
+      "primary_hex": "#D97706",
+      "secondary_hex": "#92400E",
+      "accent_hex": "#FED7AA",
+      "background_hex": "#FFFBEB"
+    }
+  },
+  {
+    "model": "bashvilleapi.colorpalette",
+    "pk": 9,
+    "fields": {
+      "user": 1,
+      "name": "Royal Purple",
+      "primary_hex": "#7C3AED",
+      "secondary_hex": "#5B21B6",
+      "accent_hex": "#DDD6FE",
+      "background_hex": "#FAFAF9"
+    }
+  },
+  {
+    "model": "bashvilleapi.colorpalette",
+    "pk": 10,
+    "fields": {
+      "user": 1,
+      "name": "Monochrome",
+      "primary_hex": "#000000",
+      "secondary_hex": "#404040",
+      "accent_hex": "#D1D5DB",
+      "background_hex": "#FFFFFF"
+    }
+  },
+  {
+    "model": "bashvilleapi.colorpalette",
+    "pk": 11,
+    "fields": {
+      "user": 1,
+      "name": "Neon Cyber",
+      "primary_hex": "#10B981",
+      "secondary_hex": "#059669",
+      "accent_hex": "#1F2937",
+      "background_hex": "#111827"
+    }
+  },
+  {
+    "model": "bashvilleapi.colorpalette",
+    "pk": 12,
+    "fields": {
+      "user": 1,
+      "name": "Pastel Dreams",
+      "primary_hex": "#A78BFA",
+      "secondary_hex": "#8B5CF6",
+      "accent_hex": "#FDE68A",
+      "background_hex": "#F9FAFB"
+    }
   }
 ]

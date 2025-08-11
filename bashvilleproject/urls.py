@@ -1,11 +1,12 @@
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
-from bashvilleapi.views import ColorPaletteViewSet, ProjectViewSet
+from bashvilleapi.views import ColorPaletteViewSet, ProjectViewSet, CommandViewSet
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r"colorpalettes", ColorPaletteViewSet, basename="colorpalette")
 router.register(r"projects", ProjectViewSet, basename="project")
+router.register(r"commands", CommandViewSet, basename="command")
 
 urlpatterns = [
     path("", include(router.urls)),

@@ -1,0 +1,90 @@
+[
+  {
+    "model": "bashvilleapi.command",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "label": "Install Dependencies",
+      "command_text": "npm install",
+      "order_index": 0,
+      "created_at": "2025-08-11T10:00:00Z"
+    }
+  },
+  {
+    "model": "bashvilleapi.command",
+    "pk": 2,
+    "fields": {
+      "user": 1,
+      "label": "Start Dev Server",
+      "command_text": "npm run dev",
+      "order_index": 1,
+      "created_at": "2025-08-11T10:01:00Z"
+    }
+  },
+  {
+    "model": "bashvilleapi.command",
+    "pk": 3,
+    "fields": {
+      "user": 1,
+      "label": "Build for Production",
+      "command_text": "npm run build",
+      "order_index": 2,
+      "created_at": "2025-08-11T10:02:00Z"
+    }
+  },
+  {
+    "model": "bashvilleapi.command",
+    "pk": 4,
+    "fields": {
+      "user": 1,
+      "label": "Initialize Git",
+      "command_text": "git init && git add . && git commit -m 'Initial commit'",
+      "order_index": 3,
+      "created_at": "2025-08-11T10:03:00Z"
+    }
+  },
+  {
+    "model": "bashvilleapi.command",
+    "pk": 5,
+    "fields": {
+      "user": 1,
+      "label": "Create React App",
+      "command_text": "npx create-react-app my-app",
+      "order_index": 4,
+      "created_at": "2025-08-11T10:04:00Z"
+    }
+  },
+  {
+    "model": "bashvilleapi.command",
+    "pk": 6,
+    "fields": {
+      "user": 1,
+      "label": "Install Tailwind CSS",
+      "command_text": "npm install -D tailwindcss postcss autoprefixer && npx tailwindcss init -p",
+      "order_index": 5,
+      "created_at": "2025-08-11T10:05:00Z"
+    }
+  },
+  {
+    "model": "bashvilleapi.command",
+    "pk": 7,
+    "fields": {
+      "user": 1,
+      "label": "Run Tests",
+      "command_text": "npm test",
+      "order_index": 6,
+      "created_at": "2025-08-11T10:06:00Z"
+    }
+  },
+  {
+    "model": "bashvilleapi.command",
+    "pk": 8,
+    "fields": {
+      "user": 1,
+      "label": "Deploy to Vercel",
+      "command_text": "vercel --prod",
+      "order_index": 7,
+      "created_at": "2025-08-11T10:07:00Z"
+    }
+  }
+]
