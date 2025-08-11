@@ -10,7 +10,7 @@ class Command(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ["order_index", "lablel"]
+        ordering = ["order_index", "label"]
         unique_together = ("user", "label")
 
     def __str__(self):
