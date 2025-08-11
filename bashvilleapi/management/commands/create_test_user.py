@@ -37,7 +37,4 @@ class Command(BaseCommand):
         if token_created:
             self.stdout.write(self.style.SUCCESS(f"Created auth token: {token.key}"))
         else:
-            self.stdout.write(
-                self.style.WARNING(f"Token already exists for user {user.username}.")
-            )
-        self.stdout.write(self.style.SUCCESS(f"Token for {user.username}: {token.key}"))
+            self.stdout.write(self.style.WARNING(f"Token already exists: {token.key}."))
