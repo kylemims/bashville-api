@@ -1,0 +1,34 @@
+Table User {
+  id int [pk, increment]
+  name varchar
+  email varchar
+  password varchar
+}
+Table Project {
+  id int [pk, increment]
+  user_id int [ref: > User.id]
+  title varchar
+  description text
+  color_palette_id int [ref: > ColorPalette.id]
+  created_at datetime
+}
+Table Command {
+  id int [pk, increment]
+  label varchar
+  command_text text
+  order_index int
+}
+Table ColorPalette {
+  id int [pk, increment]
+  name varchar
+  primary_hex varchar
+  secondary_hex varchar
+  accent_hex varchar
+  background_hex varchar
+}
+
+Table Project_Command {
+  id int [pk, increment]
+  project_id int [ref: > Project.id]
+  command_id int [ref: > Command.id]
+}
