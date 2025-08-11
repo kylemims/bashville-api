@@ -13,6 +13,10 @@ class Project(models.Model):
         blank=True,
         related_name="projects",
     )
+    # Add m2m relationship for commands via ProjectCommand
+    commands = models.ManyToManyField(
+        "Command", through="ProjectCommand", blank=True, related_name="projects"
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
