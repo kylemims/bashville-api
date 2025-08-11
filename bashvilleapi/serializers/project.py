@@ -34,7 +34,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "description",
             "color_palette",
             "color_palette_preview",
-            "commands_ids",
+            "command_ids",
             "commands_preview",
             "created_at",
         )
@@ -62,7 +62,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
         User Story #3 (Custom Color Variables)
         """
-        palette = obj.palette
+        palette = obj.color_palette
         if not palette:
             return None
 

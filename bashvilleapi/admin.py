@@ -21,7 +21,6 @@ class ProjectAdmin(admin.ModelAdmin):
     list_display = ("title", "user", "color_palette", "created_at")
     list_filter = ("created_at", "user")
     search_fields = ("title", "user__username")
-    filter_horizontal = ("commands",)  # Spicy UI feature to manage commands in projects
 
 
 @admin.register(Command)
@@ -40,7 +39,7 @@ class CommandAdmin(admin.ModelAdmin):
 @admin.register(ProjectCommand)
 class ProjectCommandAdmin(admin.ModelAdmin):
     list_display = ("project", "command", "created_at")
-    list_filter = ("created_at", "project_user")
+    list_filter = ("created_at", "project__user")
     search_fields = ("project__title", "command__label")
 
     def get_queryset(self, request):
