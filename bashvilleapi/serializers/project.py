@@ -1,4 +1,3 @@
-# bashvilleapi/serializers/project.py
 from rest_framework import serializers
 from bashvilleapi.models import Project, ColorPalette, Command
 
@@ -39,6 +38,11 @@ class ProjectSerializer(serializers.ModelSerializer):
             "created_at",
         )
         read_only_fields = ("id", "created_at")
+        # Add this to make title not required for partial updates
+        extra_kwargs = {
+            "title": {"required": False},
+            "description": {"required": False},
+        }
 
     def __init__(self, *args, **kwargs):
         """
@@ -49,7 +53,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         - Assign their own commands to projects
         """
         super().__init__(*args, **kwargs)
-        # Limit palettes to the caller’s own
+        # Limit palettes to the caller's own
         req = self.context.get("request")
         if req and req.user and req.user.is_authenticated:
             self.fields["color_palette"].queryset = ColorPalette.objects.filter(
@@ -100,7 +104,6 @@ class ProjectSerializer(serializers.ModelSerializer):
             return value
 
         user = self.context["request"].user
-
         # check that all command IDs belong to the user
         user_commands = Command.objects.filter(
             user=user,
@@ -141,10 +144,15 @@ class ProjectSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         command_ids = validated_data.pop("command_ids", None)
 
+        # Remove user from validated_data to prevent overwriting
         validated_data.pop("user", None)
 
-        # Update basic fields
-        instance = super().update(instance, validated_data)
+        # Update basic fields if any provided
+        for field, value in validated_data.items():
+            setattr(instance, field, value)
+
+        if validated_data:  # Only save if there are fields to update
+            instance.save()
 
         # Update commands if command_ids were provided
         if command_ids is not None:  # Allow empty list to clear commands
