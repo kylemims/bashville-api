@@ -3,11 +3,10 @@ from bashvilleapi.models import Project, ColorPalette, Command
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-    """Serializer for Project model, including color palette details."""
 
     # Color palette fields
     color_palette = serializers.PrimaryKeyRelatedField(
-        queryset=ColorPalette.objects.none(),  # Populated in __init__ for security
+        queryset=ColorPalette.objects.none(),
         allow_null=True,
         required=False,
     )
@@ -38,20 +37,13 @@ class ProjectSerializer(serializers.ModelSerializer):
             "created_at",
         )
         read_only_fields = ("id", "created_at")
-        # Add this to make title not required for partial updates
         extra_kwargs = {
             "title": {"required": False},
             "description": {"required": False},
         }
 
     def __init__(self, *args, **kwargs):
-        """
-        Initialize serializer and set up security constraints.
 
-        Ensures users can only:
-        - Assign their own color palettes to projects
-        - Assign their own commands to projects
-        """
         super().__init__(*args, **kwargs)
         # Limit palettes to the caller's own
         req = self.context.get("request")
@@ -113,23 +105,17 @@ class ProjectSerializer(serializers.ModelSerializer):
         if user_commands.count() != len(value):
             raise serializers.ValidationError("Some commands don't belong to you.")
 
-        # Check for duplicates in the list
         if len(value) != len(set(value)):
             raise serializers.ValidationError("Duplicate command IDs are not allowed.")
 
         return value
 
     def create(self, validated_data):
-        """
-        Create a new project with automatic user assignment.
-        - Command attachment via many-to-many relationship
-        """
+
         command_ids = validated_data.pop("command_ids", [])
 
-        # (security)
         validated_data["user"] = self.context["request"].user
 
-        # Create the project
         project = super().create(validated_data)
 
         # Attach commands if provided
