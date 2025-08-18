@@ -1,0 +1,54 @@
+{
+  "project_title": "Blog Demo with Categories",
+  "entities": [
+    {
+      "class_name": "BlogPost",
+      "endpoint": "blogposts",
+      "display_field": "title",
+      "fields": [
+        {
+          "name": "title",
+          "type": "CharField",
+          "max_length": 200,
+          "blank": false,
+          "null": false
+        },
+        {
+          "name": "content",
+          "type": "TextField",
+          "blank": true,
+          "null": false
+        }
+      ],
+      "relationships": [
+        {
+          "name": "categories",
+          "type": "ManyToManyField",
+          "target": "Category",
+          "related_name": "posts"
+        }
+      ]
+    },
+    {
+      "class_name": "Category",
+      "endpoint": "categories",
+      "display_field": "name",
+      "fields": [
+        {
+          "name": "name",
+          "type": "CharField",
+          "max_length": 100,
+          "blank": false,
+          "null": false
+        },
+        {
+          "name": "description",
+          "type": "TextField",
+          "blank": true,
+          "null": false
+        }
+      ],
+      "relationships": []
+    }
+  ]
+}

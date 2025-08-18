@@ -1,0 +1,15 @@
+# bashvilleapi/codegen/templates/django/urls.py.j2
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .viewsets import {% for e in entities %}{{ e.class_name }}ViewSet{% if not loop.last %}, {% endif %}{% endfor %}
+
+# No trailing slashes
+router = DefaultRouter(trailing_slash=False)
+
+{% for entity in entities %}
+router.register(r"{{ entity.endpoint }}", {{ entity.class_name }}ViewSet, basename="{{ entity.endpoint }}")
+{% endfor %}
+
+urlpatterns = [
+    path("", include(router.urls)),
+]

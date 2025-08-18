@@ -1,0 +1,139 @@
+# bashvilleapi/codegen/templates/django/serializers.py.j2
+from rest_framework import serializers
+from .models import {% for e in entities %}{{ e.class_name }}{% if not loop.last %}, {% endif %}{% endfor %}
+
+
+{% for entity in entities %}
+class {{ entity.class_name }}Serializer(serializers.ModelSerializer):
+    """Generated serializer for {{ entity.class_name }} following Bashville patterns."""
+
+{% for rel in entity.relationships %}
+{% if rel.type == "ManyToManyField" %}
+    # Dual field pattern for M2M relationships
+    {{ rel.name }}_ids = serializers.ListField(
+        child=serializers.IntegerField(),
+        write_only=True,
+        required=False,
+    )
+    {{ rel.name }}_preview = serializers.SerializerMethodField(read_only=True)
+{% elif rel.type == "ForeignKey" %}
+    # Dual field pattern for FK relationships
+    {{ rel.name }}_preview = serializers.SerializerMethodField(read_only=True)
+{% endif %}
+{% endfor %}
+
+    class Meta:
+        model = {{ entity.class_name }}
+        fields = (
+            "id",
+{% for field in entity.fields %}
+            "{{ field.name }}",
+{% endfor %}
+{% for rel in entity.relationships %}
+{% if rel.type == "ManyToManyField" %}
+            "{{ rel.name }}_ids",
+            "{{ rel.name }}_preview",
+{% elif rel.type == "ForeignKey" %}
+            "{{ rel.name }}",
+            "{{ rel.name }}_preview",
+{% endif %}
+{% endfor %}
+            "created_at",
+        )
+        read_only_fields = ("id", "created_at")
+        extra_kwargs = {
+            # Support partial updates
+{% for field in entity.fields %}
+            "{{ field.name }}": {"required": False},
+{% endfor %}
+        }
+
+{% if entity.relationships %}
+    def __init__(self, *args, **kwargs):
+        """filtering based on user."""
+        super().__init__(*args, **kwargs)
+        req = self.context.get("request")
+        if req and req.user and req.user.is_authenticated:
+{% for rel in entity.relationships %}
+{% if rel.type == "ForeignKey" %}
+            from .models import {{ rel.target }}
+            self.fields["{{ rel.name }}"].queryset = {{ rel.target }}.objects.filter(user=req.user)
+{% endif %}
+{% endfor %}
+
+{% endif %}
+{% for rel in entity.relationships %}
+{% if rel.type == "ManyToManyField" %}
+    def get_{{ rel.name }}_preview(self, obj):
+        """Return related {{ rel.target }} objects for display."""
+        return [
+            {"id": item.id, "name": str(item)}
+            for item in obj.{{ rel.name }}.all()
+        ]
+
+    def validate_{{ rel.name }}_ids(self, value):
+        """Ensure objects belong to user."""
+        if not value:
+            return value
+        user = self.context["request"].user
+        from .models import {{ rel.target }}
+        user_items = {{ rel.target }}.objects.filter(user=user, id__in=value)
+        if user_items.count() != len(value):
+            raise serializers.ValidationError(f"Some {{ rel.target|lower }}s don't belong to you.")
+        return value
+{% elif rel.type == "ForeignKey" %}
+    def get_{{ rel.name }}_preview(self, obj):
+        """Return related {{ rel.target }} object details."""
+        if obj.{{ rel.name }}:
+            return {"id": obj.{{ rel.name }}.id, "name": str(obj.{{ rel.name }})}
+        return None
+{% endif %}
+{% endfor %}
+
+{% if entity.relationships and entity.relationships|selectattr("type", "equalto", "ManyToManyField")|list %}
+    def create(self, validated_data):
+        """Handle M2M relationships during creation."""
+{% for rel in entity.relationships %}
+{% if rel.type == "ManyToManyField" %}
+        {{ rel.name }}_ids = validated_data.pop("{{ rel.name }}_ids", [])
+{% endif %}
+{% endfor %}
+        # Auto-assign user
+        validated_data["user"] = self.context["request"].user
+        instance = super().create(validated_data)
+        
+{% for rel in entity.relationships %}
+{% if rel.type == "ManyToManyField" %}
+        if {{ rel.name }}_ids:
+            from .models import {{ rel.target }}
+            {{ rel.name }}_objects = {{ rel.target }}.objects.filter(
+                user=self.context["request"].user, id__in={{ rel.name }}_ids
+            )
+            instance.{{ rel.name }}.set({{ rel.name }}_objects)
+{% endif %}
+{% endfor %}
+        return instance
+
+    def update(self, instance, validated_data):
+        """Handle M2M relationships during updates."""
+{% for rel in entity.relationships %}
+{% if rel.type == "ManyToManyField" %}
+        {{ rel.name }}_ids = validated_data.pop("{{ rel.name }}_ids", None)
+{% endif %}
+{% endfor %}
+        instance = super().update(instance, validated_data)
+        
+{% for rel in entity.relationships %}
+{% if rel.type == "ManyToManyField" %}
+        if {{ rel.name }}_ids is not None:
+            from .models import {{ rel.target }}
+            {{ rel.name }}_objects = {{ rel.target }}.objects.filter(
+                user=self.context["request"].user, id__in={{ rel.name }}_ids
+            )
+            instance.{{ rel.name }}.set({{ rel.name }}_objects)
+{% endif %}
+{% endfor %}
+        return instance
+{% endif %}
+
+{% endfor %}

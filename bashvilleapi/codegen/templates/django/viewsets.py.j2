@@ -1,0 +1,22 @@
+# bashvilleapi/codegen/templates/django/viewsets.py.j2
+from rest_framework import viewsets, permissions
+from rest_framework.response import Response
+from .models import {% for e in entities %}{{ e.class_name }}{% if not loop.last %}, {% endif %}{% endfor %}
+from .serializers import {% for e in entities %}{{ e.class_name }}Serializer{% if not loop.last %}, {% endif %}{% endfor %}
+
+
+{% for entity in entities %}
+class {{ entity.class_name }}ViewSet(viewsets.ModelViewSet):
+    """Generated ViewSet for {{ entity.class_name }} following Bashville security patterns."""
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = {{ entity.class_name }}Serializer
+
+    def get_queryset(self):
+        """users only see their own data."""
+        return {{ entity.class_name }}.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        """Auto-assign current user to new objects."""
+        serializer.save(user=self.request.user)
+
+{% endfor %}
