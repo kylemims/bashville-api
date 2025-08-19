@@ -1,5 +1,4 @@
 from rest_framework import viewsets, permissions
-from rest_framework.response import Response
 from bashvilleapi.models import Project
 from bashvilleapi.serializers import ProjectSerializer
 

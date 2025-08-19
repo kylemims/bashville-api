@@ -1,0 +1,51 @@
+{
+  "project_title": "Blog Demo with Categories",
+  "palette": {
+    "primary": "#fee394",
+    "secondary": "#d46a6a",
+    "accent": "#46cba7",
+    "background": "#0c0806"
+  },
+  "api_prefix": "api",
+  "primary_entity": {
+    "endpoint": "blogposts",
+    "title_plural": "Blog Posts",
+    "input_fields": [
+      {"name": "title", "label": "Title"},
+      {"name": "content", "label": "Content"}
+    ],
+    "form_defaults": ["title: ''", "content: ''"],
+    "columns": ["Title", "Content", "Created"],
+    "column_props": ["title", "content", "created_at"]
+  },
+  "entities": [
+    {
+      "class_name": "BlogPost",
+      "endpoint": "blogposts",
+      "display_field": "title",
+      "fields": [
+        {"name": "title", "type": "CharField", "max_length": 200, "blank": false},
+        {"name": "content", "type": "TextField", "blank": true}
+      ],
+      "relationships": [
+        {
+          "type": "ManyToManyField",
+          "name": "categories",
+          "target": "Category",
+          "related_name": "posts"
+        }
+      ]
+    },
+    {
+      "class_name": "Category", 
+      "endpoint": "categories",
+      "display_field": "name",
+      "fields": [
+        {"name": "name", "type": "CharField", "max_length": 100, "blank": false},
+        {"name": "description", "type": "TextField", "blank": true}
+      ],
+      "relationships": []
+    }
+  ],
+  "api_base": "http://localhost:8000/api"
+}

@@ -1,5 +1,5 @@
 // bashvilleapi/codegen/templates/react/src/api.js.j2
-const BASE = "http://localhost:8000/{{ primary_entity.endpoint }}";
+const BASE = "{{ api_base }}/{{ primary_entity.endpoint }}";
 
 const getToken = () => {
   return localStorage.getItem("auth_token");

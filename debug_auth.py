@@ -3,7 +3,6 @@
 Debug script to test authentication and user filtering
 """
 import os
-import sys
 import django
 
 # Setup Django environment

@@ -42,6 +42,10 @@ class Command(BaseCommand):
             raise CommandError(f"Context file not found: {ctx_path}")
         ctx = json.loads(ctx_path.read_text("utf-8"))
 
+        # Add app name based on output directory for Django models
+        api_dir = Path(opts["out_api"])
+        ctx["app_name"] = api_dir.name
+
         env = Environment(
             loader=FileSystemLoader(str(tdir)),
             autoescape=select_autoescape(enabled_extensions=("html", "j2")),
@@ -49,7 +53,6 @@ class Command(BaseCommand):
             lstrip_blocks=True,
         )
 
-        api_dir = Path(opts["out_api"])
         api_dir.mkdir(parents=True, exist_ok=True)
 
         def render_write(trel: str, orel: str, out_base: Path = api_dir):

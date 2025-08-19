@@ -2,8 +2,8 @@
 """
 Simple test script to verify authentication endpoints work correctly.
 """
-import requests
 import json
+import requests
 
 BASE_URL = "http://localhost:8000"
 
@@ -14,7 +14,7 @@ def test_login_endpoint():
     data = {"username": "testuser", "password": "testpass123"}
 
     try:
-        response = requests.post(url, json=data)
+        response = requests.post(url, json=data, timeout=10)
         print(f"Login Status Code: {response.status_code}")
         print(f"Login Response: {json.dumps(response.json(), indent=2)}")
 
@@ -38,7 +38,7 @@ def test_projects_endpoint(token):
     headers = {"Authorization": f"Token {token}"}
 
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, timeout=10)
         print(f"Projects Status Code: {response.status_code}")
         print(f"Projects Response: {json.dumps(response.json(), indent=2)}")
 

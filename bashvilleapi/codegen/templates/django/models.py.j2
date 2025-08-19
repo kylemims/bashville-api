@@ -42,5 +42,6 @@ class {{ entity.class_name }}(models.Model):
         return f"{getattr(self, '{{ entity.display_field }}', self.pk)} by {self.user.username}"
 
     class Meta:
+        app_label = '{{ app_name | default("generated_api") }}'
         ordering = ['-created_at']
 {% endfor %}
