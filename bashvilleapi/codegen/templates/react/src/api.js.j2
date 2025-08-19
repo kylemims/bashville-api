@@ -1,17 +1,17 @@
-const BASE = "http://localhost:8000{{ primary_entity_endpoint }}";
+// bashvilleapi/codegen/templates/react/src/api.js.j2
+const BASE = "http://localhost:8000/{{ primary_entity.endpoint }}/";
 
 const getToken = () => {
   return localStorage.getItem("auth_token");
+};
 
-  const authHeaders = {
-    const token = getToken()
-    return token ? { 
-      'Authorization': `Token ${token}`,
-      'Content-Type': 'application/json'
-     } : { 'Content-Type': 'application/json' }
-  };
-
-// refactor const api w/ async await
+const authHeaders = () => {
+  const token = getToken();
+  return token ? { 
+    'Authorization': `Token ${token}`,
+    'Content-Type': 'application/json'
+  } : { 'Content-Type': 'application/json' };
+};
 
 export const api = {
   list: async () => {
@@ -36,17 +36,16 @@ export const api = {
       throw new Error('Authentication Required');
     }
     return response.json();
-  }
-};
-},
+  },
 
-export const remove = async (id) => {
-  const response = await fetch(BASE + id + "/", {
-    method: "DELETE",
-    headers: authHeaders()
-  });
-  if (response.status === 401) {
-    window.location.href = '/login';
-    throw new Error('Authentication Required');
+  remove: async (id) => {
+    const response = await fetch(BASE + id + "/", {
+      method: "DELETE",
+      headers: authHeaders()
+    });
+    if (response.status === 401) {
+      window.location.href = '/login';
+      throw new Error('Authentication Required');
+    }
   }
 };

@@ -76,7 +76,7 @@ from django.contrib.auth.models import User
 print("🌱 Seed script placeholder created")
 """
             seed_tmp.write_text(seed_content, encoding="utf-8")
-            self.stdout.write(f"✅ Generated: _seed_tmp.py")
+            self.stdout.write("✅ Generated: _seed_tmp.py")
         except Exception as e:
             self.stdout.write(
                 self.style.ERROR(f"❌ Failed to generate seed script: {e}")
@@ -95,3 +95,38 @@ print("🌱 Seed script placeholder created")
                 f"4. Load seed data: python manage.py shell < {seed_tmp}"
             )
         )
+
+        # Generate React files if requested
+        if opts.get("include_react", True):
+            self.stdout.write(self.style.SUCCESS("🚀 Generating React frontend..."))
+            react_dir = Path(opts["out_client"])
+            react_dir.mkdir(parents=True, exist_ok=True)
+
+            # Create src directory structure
+            (react_dir / "src" / "components").mkdir(parents=True, exist_ok=True)
+            (react_dir / "public").mkdir(parents=True, exist_ok=True)
+
+            # Generate React files
+            react_templates = [
+                ("react/src/App.jsx.j2", "src/App.jsx"),
+                ("react/src/api.js.j2", "src/api.js"),
+                ("react/src/styles.css.j2", "src/styles.css"),
+                (
+                    "react/src/components/CrudTable.jsx.j2",
+                    "src/components/CrudTable.jsx",
+                ),
+                ("react/src/components/Navbar.jsx.j2", "src/components/Navbar.jsx"),
+                ("react/src/components/Hero.jsx.j2", "src/components/Hero.jsx"),
+                ("react/public/index.html.j2", "public/index.html"),
+            ]
+
+            for template_path, output_path in react_templates:
+                try:
+                    template = env.get_template(template_path)
+                    content = template.render(**ctx)
+                    (react_dir / output_path).write_text(content, encoding="utf-8")
+                    self.stdout.write(f"✅ Generated: {output_path}")
+                except Exception as e:
+                    self.stdout.write(
+                        self.style.ERROR(f"❌ Failed to generate {output_path}: {e}")
+                    )
