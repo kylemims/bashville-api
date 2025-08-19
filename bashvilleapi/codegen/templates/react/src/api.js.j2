@@ -1,5 +1,5 @@
 // bashvilleapi/codegen/templates/react/src/api.js.j2
-const BASE = "http://localhost:8000/{{ primary_entity.endpoint }}/";
+const BASE = "http://localhost:8000/{{ primary_entity.endpoint }}";
 
 const getToken = () => {
   return localStorage.getItem("auth_token");
@@ -39,7 +39,7 @@ export const api = {
   },
 
   remove: async (id) => {
-    const response = await fetch(BASE + id + "/", {
+    const response = await fetch(`${BASE}/${id}`, {
       method: "DELETE",
       headers: authHeaders()
     });
@@ -47,5 +47,29 @@ export const api = {
       window.location.href = '/login';
       throw new Error('Authentication Required');
     }
+  },
+
+  update: async (id, data) => {
+    const response = await fetch(`${BASE}/${id}`, {
+      method: 'PUT',
+      headers: authHeaders(),
+      body: JSON.stringify(data)
+    });
+    if (response.status === 401) {
+      window.location.href = '/login';
+      throw new Error('Authentication Required');
+    }
+    return response.json();
+  },
+
+  get: async (id) => {
+    const response = await fetch(`${BASE}/${id}`, {
+      headers: authHeaders()
+    });
+    if (response.status === 401) {
+      window.location.href = '/login';
+      throw new Error('Authentication Required');
+    }
+    return response.json();
   }
 };
