@@ -2,53 +2,40 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+{% macro field_args(f) -%}
+    {%- set args = [] -%}
+    {%- if f.type == "CharField" and f.max_length -%}
+        {%- set _ = args.append("max_length=" ~ f.max_length) -%}
+    {%- endif -%}
+    {%- if f.blank -%}{%- set _ = args.append("blank=True") -%}{%- endif -%}
+    {%- if f.null -%}{%- set _ = args.append("null=True") -%}{%- endif -%}
+    {{ args|join(", ") }}
+{%- endmacro %}
 
 {% for entity in entities %}
 class {{ entity.class_name }}(models.Model):
-    """Generated {{ entity.class_name }} model following Bashville security patterns."""
-    
-    # 🔐 User ownership (critical for Bashville security)
-    user = models.ForeignKey(
-        User, 
-        on_delete=models.CASCADE, 
-        related_name="{{ entity.endpoint }}"
-    )
-    
-    # Entity-specific fields
-{% for field in entity.fields %}
-    {{ field.name }} = models.{{ field.type }}(
-        {%- if field.type == "CharField" and field.max_length -%}
-        max_length={{ field.max_length }}
-        {%- endif -%}
-        {%- if field.blank -%}
-        {%- if field.type == "CharField" and field.max_length -%}, {% endif -%}blank=True
-        {%- endif -%}
-        {%- if field.null -%}
-        {%- if (field.type == "CharField" and field.max_length) or field.blank -%}, {% endif -%}null=True
-        {%- endif -%}
-    )
-{% endfor %}
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="{{ entity.endpoint }}")
 
-    # Relationships
+{% for field in entity.fields %}
+    {{ field.name }} = models.{{ field.type }}({{ field_args(field) }})
+{% endfor %}
 {% for rel in entity.relationships %}
 {% if rel.type == "ForeignKey" %}
     {{ rel.name }} = models.ForeignKey(
-        "{{ rel.target }}", 
+        "{{ rel.target }}",
         on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
+        null=True, blank=True,
         related_name="{{ rel.related_name }}"
     )
 {% elif rel.type == "ManyToManyField" %}
     {{ rel.name }} = models.ManyToManyField(
-        "{{ rel.target }}", 
-        related_name="{{ rel.related_name }}", 
+        "{{ rel.target }}",
+        related_name="{{ rel.related_name }}",
         blank=True
     )
 {% endif %}
 {% endfor %}
-    
-    # Timestamps (following Bashville pattern)
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -56,5 +43,4 @@ class {{ entity.class_name }}(models.Model):
 
     class Meta:
         ordering = ['-created_at']
-
 {% endfor %}

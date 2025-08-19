@@ -1,15 +1,14 @@
 # bashvilleapi/codegen/templates/django/serializers.py.j2
 from rest_framework import serializers
-from .models import {% for e in entities %}{{ e.class_name }}{% if not loop.last %}, {% endif %}{% endfor %}
+from .models import Product, Category, {% for e in entities %}{{ e.class_name }}{% if not loop.last %}, {% endif %}{% endfor %}
 
 
 {% for entity in entities %}
 class {{ entity.class_name }}Serializer(serializers.ModelSerializer):
-    """Generated serializer for {{ entity.class_name }} following Bashville patterns."""
 
 {% for rel in entity.relationships %}
 {% if rel.type == "ManyToManyField" %}
-    # Bashville dual field pattern for M2M relationships
+    # Dual field pattern for M2M relationships
     {{ rel.name }}_ids = serializers.ListField(
         child=serializers.IntegerField(),
         write_only=True,
@@ -17,7 +16,7 @@ class {{ entity.class_name }}Serializer(serializers.ModelSerializer):
     )
     {{ rel.name }}_preview = serializers.SerializerMethodField(read_only=True)
 {% elif rel.type == "ForeignKey" %}
-    # Bashville dual field pattern for FK relationships  
+    # Dual field pattern for FK relationships
     {{ rel.name }}_preview = serializers.SerializerMethodField(read_only=True)
 {% endif %}
 {% endfor %}
@@ -42,7 +41,7 @@ class {{ entity.class_name }}Serializer(serializers.ModelSerializer):
         )
         read_only_fields = ("id", "created_at")
         extra_kwargs = {
-            # Bashville pattern: Support partial updates
+            # Support partial updates
 {% for field in entity.fields %}
             "{{ field.name }}": {"required": False},
 {% endfor %}
@@ -51,7 +50,7 @@ class {{ entity.class_name }}Serializer(serializers.ModelSerializer):
 {% set has_fk = entity.relationships|selectattr("type", "equalto", "ForeignKey")|list %}
 {% if has_fk %}
     def __init__(self, *args, **kwargs):
-        """Bashville security pattern: Dynamic queryset filtering based on user."""
+        """Dynamic queryset filtering based on user."""
         super().__init__(*args, **kwargs)
         req = self.context.get("request")
         if req and req.user and req.user.is_authenticated:
@@ -72,7 +71,7 @@ class {{ entity.class_name }}Serializer(serializers.ModelSerializer):
         ]
 
     def validate_{{ rel.name }}_ids(self, value):
-        """🔐 Bashville security: Ensure objects belong to user."""
+        """🔐 Ensure objects belong to user."""
         if not value:
             return value
         user = self.context["request"].user
@@ -97,7 +96,7 @@ class {{ entity.class_name }}Serializer(serializers.ModelSerializer):
         {{ rel.name }}_ids = validated_data.pop("{{ rel.name }}_ids", [])
 {% endif %}
 {% endfor %}
-        # Bashville pattern: Auto-assign user
+        # Auto-assign user
         validated_data["user"] = self.context["request"].user
         instance = super().create(validated_data)
         

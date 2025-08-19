@@ -7,17 +7,14 @@ const getToken = () => {
 
 const authHeaders = () => {
   const token = getToken();
-  return token ? { 
-    'Authorization': `Token ${token}`,
-    'Content-Type': 'application/json'
-  } : { 'Content-Type': 'application/json' };
+  return token
+  ? { 'Authorization': `Token ${token}`,'Content-Type': 'application/json'}
+  : { 'Content-Type': 'application/json' };
 };
 
 export const api = {
   list: async () => {
-    const response = await fetch(BASE, {
-      headers: authHeaders()
-    });
+    const response = await fetch(BASE, { headers: authHeaders() });
     if (response.status === 401) {
       window.location.href = '/login';
       return [];

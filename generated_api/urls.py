@@ -2,6 +2,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .viewsets import BlogPostViewSet, CategoryViewSet
+
 # No trailing slashes
 router = DefaultRouter(trailing_slash=False)
 
