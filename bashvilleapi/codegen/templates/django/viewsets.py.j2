@@ -12,11 +12,11 @@ class {{ entity.class_name }}ViewSet(viewsets.ModelViewSet):
     serializer_class = {{ entity.class_name }}Serializer
 
     def get_queryset(self):
-        """users only see their own data."""
+        """🔐 Bashville pattern: User isolation - users only see their own data."""
         return {{ entity.class_name }}.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
-        """Auto-assign current user to new objects."""
+        """🔐 Bashville pattern: Auto-assign current user to new objects."""
         serializer.save(user=self.request.user)
 
 {% endfor %}

@@ -5,22 +5,27 @@ from django.contrib.auth.models import User
 
 {% for entity in entities %}
 class {{ entity.class_name }}(models.Model):
-    """Generated model for {{ entity.class_name }}."""
+    """Generated {{ entity.class_name }} model following Bashville security patterns."""
     
+    # 🔐 User ownership (critical for Bashville security)
     user = models.ForeignKey(
         User, 
         on_delete=models.CASCADE, 
         related_name="{{ entity.endpoint }}"
     )
     
-    # Entity fields
+    # Entity-specific fields
 {% for field in entity.fields %}
     {{ field.name }} = models.{{ field.type }}(
         {%- if field.type == "CharField" and field.max_length -%}
         max_length={{ field.max_length }}
         {%- endif -%}
-        {%- if field.blank -%}, blank=True{%- endif -%}
-        {%- if field.null -%}, null=True{%- endif -%}
+        {%- if field.blank -%}
+        {%- if field.type == "CharField" and field.max_length -%}, {% endif -%}blank=True
+        {%- endif -%}
+        {%- if field.null -%}
+        {%- if (field.type == "CharField" and field.max_length) or field.blank -%}, {% endif -%}null=True
+        {%- endif -%}
     )
 {% endfor %}
 
@@ -43,6 +48,7 @@ class {{ entity.class_name }}(models.Model):
 {% endif %}
 {% endfor %}
     
+    # Timestamps (following Bashville pattern)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

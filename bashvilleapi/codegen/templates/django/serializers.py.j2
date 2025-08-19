@@ -9,7 +9,7 @@ class {{ entity.class_name }}Serializer(serializers.ModelSerializer):
 
 {% for rel in entity.relationships %}
 {% if rel.type == "ManyToManyField" %}
-    # Dual field pattern for M2M relationships
+    # Bashville dual field pattern for M2M relationships
     {{ rel.name }}_ids = serializers.ListField(
         child=serializers.IntegerField(),
         write_only=True,
@@ -17,7 +17,7 @@ class {{ entity.class_name }}Serializer(serializers.ModelSerializer):
     )
     {{ rel.name }}_preview = serializers.SerializerMethodField(read_only=True)
 {% elif rel.type == "ForeignKey" %}
-    # Dual field pattern for FK relationships
+    # Bashville dual field pattern for FK relationships  
     {{ rel.name }}_preview = serializers.SerializerMethodField(read_only=True)
 {% endif %}
 {% endfor %}
@@ -42,21 +42,21 @@ class {{ entity.class_name }}Serializer(serializers.ModelSerializer):
         )
         read_only_fields = ("id", "created_at")
         extra_kwargs = {
-            # Support partial updates
+            # Bashville pattern: Support partial updates
 {% for field in entity.fields %}
             "{{ field.name }}": {"required": False},
 {% endfor %}
         }
 
-{% if entity.relationships %}
+{% set has_fk = entity.relationships|selectattr("type", "equalto", "ForeignKey")|list %}
+{% if has_fk %}
     def __init__(self, *args, **kwargs):
-        """filtering based on user."""
+        """Bashville security pattern: Dynamic queryset filtering based on user."""
         super().__init__(*args, **kwargs)
         req = self.context.get("request")
         if req and req.user and req.user.is_authenticated:
 {% for rel in entity.relationships %}
 {% if rel.type == "ForeignKey" %}
-            from .models import {{ rel.target }}
             self.fields["{{ rel.name }}"].queryset = {{ rel.target }}.objects.filter(user=req.user)
 {% endif %}
 {% endfor %}
@@ -72,14 +72,13 @@ class {{ entity.class_name }}Serializer(serializers.ModelSerializer):
         ]
 
     def validate_{{ rel.name }}_ids(self, value):
-        """Ensure objects belong to user."""
+        """🔐 Bashville security: Ensure objects belong to user."""
         if not value:
             return value
         user = self.context["request"].user
-        from .models import {{ rel.target }}
         user_items = {{ rel.target }}.objects.filter(user=user, id__in=value)
         if user_items.count() != len(value):
-            raise serializers.ValidationError(f"Some {{ rel.target|lower }}s don't belong to you.")
+            raise serializers.ValidationError("Some {{ rel.target|lower }}s don't belong to you.")
         return value
 {% elif rel.type == "ForeignKey" %}
     def get_{{ rel.name }}_preview(self, obj):
@@ -98,14 +97,13 @@ class {{ entity.class_name }}Serializer(serializers.ModelSerializer):
         {{ rel.name }}_ids = validated_data.pop("{{ rel.name }}_ids", [])
 {% endif %}
 {% endfor %}
-        # Auto-assign user
+        # Bashville pattern: Auto-assign user
         validated_data["user"] = self.context["request"].user
         instance = super().create(validated_data)
         
 {% for rel in entity.relationships %}
 {% if rel.type == "ManyToManyField" %}
         if {{ rel.name }}_ids:
-            from .models import {{ rel.target }}
             {{ rel.name }}_objects = {{ rel.target }}.objects.filter(
                 user=self.context["request"].user, id__in={{ rel.name }}_ids
             )
@@ -126,7 +124,6 @@ class {{ entity.class_name }}Serializer(serializers.ModelSerializer):
 {% for rel in entity.relationships %}
 {% if rel.type == "ManyToManyField" %}
         if {{ rel.name }}_ids is not None:
-            from .models import {{ rel.target }}
             {{ rel.name }}_objects = {{ rel.target }}.objects.filter(
                 user=self.context["request"].user, id__in={{ rel.name }}_ids
             )
