@@ -19,5 +19,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("auth/login/", LoginView.as_view(), name="api_login"),
     path("auth/register/", RegisterView.as_view(), name="api_register"),
+    path("", include("generated_api.urls")),
     path("test/", include("test_blog.urls")),
 ]
