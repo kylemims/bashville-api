@@ -29,7 +29,6 @@ def _field_line(field: Dict) -> str:
     if not name or not ftype:
         return ""
 
-    # Simple primitives
     if ftype in {
         "CharField",
         "TextField",
@@ -40,7 +39,6 @@ def _field_line(field: Dict) -> str:
         "DateTimeField",
         "EmailField",
     }:
-        # Ensure CharField has max_length
         if ftype == "CharField" and "max_length" not in field:
             field["max_length"] = 255
 
@@ -50,7 +48,7 @@ def _field_line(field: Dict) -> str:
                 v = field[k]
                 opts.append(f'{k}="{v}"' if isinstance(v, str) else f"{k}={v}")
 
-        kwargs = ", ".join(opts)  # <-- no leading comma here
+        kwargs = ", ".join(opts)
         return (
             f"    {name} = models.{ftype}({kwargs})"
             if kwargs
@@ -100,7 +98,6 @@ def _model_class(model: Dict, timestamps: bool) -> str:
             lines.append("    created_at = models.DateTimeField(auto_now_add=True)")
             lines.append("    updated_at = models.DateTimeField(auto_now=True)")
 
-    # nice __str__
     lines.append("")
     lines.append("    def __str__(self):")
     lines.append(f'        return f"{mname}({{self.pk}})"')
@@ -108,7 +105,6 @@ def _model_class(model: Dict, timestamps: bool) -> str:
 
 
 def render_models_py(cfg: Dict[str, Any]) -> str:
-    """Generate a minimal models.py from backend_config."""
     options = cfg.get("options", {})
     timestamps = bool(options.get("timestamps", True))
     models_cfg = cfg.get("models", [])
@@ -222,7 +218,7 @@ class CodegenGenerateView(APIView):
             "serializers.py": render_serializers_py(cfg),
             "viewsets.py": render_viewsets_py(cfg),
             "urls.py": render_urls_py(cfg),
-            # You can add admin.py, __init__.py, etc. later
+            # Add admin.py, __init__.py, etc. later
         }
         return Response(
             {
