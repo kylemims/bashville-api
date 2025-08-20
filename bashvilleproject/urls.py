@@ -8,6 +8,7 @@ from bashvilleapi.views import (
     RegisterView,
     LoginView,
 )
+from bashvilleapi.views.codegen import CodegenGenerateView
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r"colorpalettes", ColorPaletteViewSet, basename="colorpalette")
@@ -19,4 +20,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("auth/login/", LoginView.as_view(), name="api_login"),
     path("auth/register/", RegisterView.as_view(), name="api_register"),
+    path("codegen/generate", CodegenGenerateView.as_view(), name="codegen_generate"),
+    path("api/generated/", include("generated_app.urls")),
 ]

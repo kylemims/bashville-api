@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "corsheaders",
     "bashvilleapi",
+    "generated_app.apps.GeneratedAppConfig",
 ]
 
 REST_FRAMEWORK = {

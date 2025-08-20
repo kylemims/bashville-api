@@ -1,5 +1,5 @@
 # bashvilleapi/views/codegen.py
-from typing import Dict, List
+from typing import Dict, Any, List
 from django.utils.text import slugify
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -23,6 +23,9 @@ def _field_line(field: Dict) -> str:
     ftype = field.get("type")
     name = field.get("name")
 
+    if ftype == "CharField" and "max_length" not in field:
+        field["max_length"] = 255
+
     if not name or not ftype:
         return ""
 
@@ -37,18 +40,22 @@ def _field_line(field: Dict) -> str:
         "DateTimeField",
         "EmailField",
     }:
+        # Ensure CharField has max_length
+        if ftype == "CharField" and "max_length" not in field:
+            field["max_length"] = 255
+
         opts: List[str] = []
-        # carry through known kwargs if present
         for k in ("max_length", "null", "blank", "unique", "default"):
             if k in field:
                 v = field[k]
-                # strings need quotes, others as-is
-                if isinstance(v, str):
-                    opts.append(f'{k}="{v}"')
-                else:
-                    opts.append(f"{k}={v}")
-        kwargs = (", " + ", ".join(opts)) if opts else ""
-        return f"    {name} = models.{ftype}({kwargs})"
+                opts.append(f'{k}="{v}"' if isinstance(v, str) else f"{k}={v}")
+
+        kwargs = ", ".join(opts)  # <-- no leading comma here
+        return (
+            f"    {name} = models.{ftype}({kwargs})"
+            if kwargs
+            else f"    {name} = models.{ftype}()"
+        )
 
     # ForeignKey / ManyToMany / OneToOne
     if ftype in {"ForeignKey", "OneToOneField", "ManyToManyField"}:
@@ -100,9 +107,8 @@ def _model_class(model: Dict, timestamps: bool) -> str:
     return "\n".join(lines)
 
 
-def render_models_py(cfg: Dict) -> str:
+def render_models_py(cfg: Dict[str, Any]) -> str:
     """Generate a minimal models.py from backend_config."""
-    app_label = cfg.get("app_label", "generated_app")
     options = cfg.get("options", {})
     timestamps = bool(options.get("timestamps", True))
     models_cfg = cfg.get("models", [])
@@ -196,6 +202,7 @@ class CodegenGenerateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
+
         project_id = request.data.get("project_id")
         if not project_id:
             return Response(
