@@ -17,6 +17,7 @@ class Project(models.Model):
     commands = models.ManyToManyField(
         "Command", through="ProjectCommand", blank=True, related_name="projects"
     )
+    backend_config = models.JSONField(default=dict, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

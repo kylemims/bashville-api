@@ -32,6 +32,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "description",
             "color_palette",
             "color_palette_preview",
+            "backend_config",
             "command_ids",
             "commands_preview",
             "created_at",
@@ -40,6 +41,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "title": {"required": False},
             "description": {"required": False},
+            "backend_config": {"required": False},
         }
 
     def __init__(self, *args, **kwargs):
@@ -53,11 +55,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             )
 
     def get_color_palette_preview(self, obj):
-        """
-        Return full color palette data for frontend display.
 
-        User Story #3 (Custom Color Variables)
-        """
         palette = obj.color_palette
         if not palette:
             return None
@@ -71,13 +69,25 @@ class ProjectSerializer(serializers.ModelSerializer):
             "background_hex": palette.background_hex,
         }
 
-    def get_commands_preview(self, obj):
-        """
-        Return list of commands (command stash) for frontend display.
+    def validate_backend_config(self, value):
+        # MVP validation: ensure expected top-level keys, keep it permissive
+        if not isinstance(value, dict):
+            raise serializers.ValidationError("backend_config must be a JSON object.")
+        models = value.get("models", [])
+        if not isinstance(models, list):
+            raise serializers.ValidationError("backend_config.models must be a list.")
+        # Optional: basic per-model checks
+        for m in models:
+            if not isinstance(m, dict) or "name" not in m:
+                raise serializers.ValidationError("Each model needs a name.")
+            if "fields" in m and not isinstance(m["fields"], list):
+                raise serializers.ValidationError(
+                    "Model.fields must be a list if provided."
+                )
+        return value
 
-        User Story #2 (Save custom commands) AND
-        User Story #4 (Command Stash + Script Generator)
-        """
+    def get_commands_preview(self, obj):
+
         return [
             {
                 "id": command.id,
@@ -89,9 +99,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         ]
 
     def validate_command_ids(self, value):
-        """
-        Validate that command IDs belong to the user.
-        """
+
         if not value:
             return value
 
@@ -113,9 +121,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
 
         command_ids = validated_data.pop("command_ids", [])
-
         validated_data["user"] = self.context["request"].user
-
         project = super().create(validated_data)
 
         # Attach commands if provided
