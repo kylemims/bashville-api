@@ -1,0 +1,122 @@
+{
+  "title": "TaskMaster Pro",
+  "description": "A complete task management system with color theming",
+  "color_palette_preview": {
+    "name": "Professional Blue",
+    "primary_hex": "#1e3a8a",
+    "secondary_hex": "#3b82f6",
+    "accent_hex": "#10b981",
+    "background_hex": "#f8fafc"
+  },
+  "commands_preview": [
+    {
+      "label": "Setup Virtual Environment",
+      "command_text": "python3 -m venv venv && source venv/bin/activate && pip install --upgrade pip"
+    },
+    {
+      "label": "Install Django Dependencies",
+      "command_text": "pip install django djangorestframework django-cors-headers python-decouple"
+    },
+    {
+      "label": "Create Django Project",
+      "command_text": "django-admin startproject taskmasterpro . && python manage.py startapp tasks"
+    },
+    {
+      "label": "Setup Database",
+      "command_text": "python manage.py makemigrations && python manage.py migrate"
+    },
+    {
+      "label": "Create Admin User",
+      "command_text": "echo \"from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@taskmaster.com', 'admin123')\" | python manage.py shell"
+    },
+    {
+      "label": "Initialize Git",
+      "command_text": "git init && echo \"venv/\\n*.pyc\\n__pycache__/\\n.env\\ndb.sqlite3\" > .gitignore && git add . && git commit -m \"Initial TaskMaster Pro setup\""
+    },
+    {
+      "label": "Start Development Server",
+      "command_text": "echo \"🚀 TaskMaster Pro is ready! Visit http://localhost:8000 to see your app.\" && python manage.py runserver 0.0.0.0:8000"
+    }
+  ],
+  "backend_config": {
+    "app_label": "tasks",
+    "models": [
+      {
+        "name": "Task",
+        "fields": [
+          {
+            "name": "title",
+            "type": "CharField",
+            "max_length": 150,
+            "null": false,
+            "blank": false
+          },
+          {
+            "name": "description",
+            "type": "TextField",
+            "blank": true
+          },
+          {
+            "name": "priority",
+            "type": "IntegerField",
+            "default": 1
+          },
+          {
+            "name": "completed",
+            "type": "BooleanField",
+            "default": false
+          },
+          {
+            "name": "due_date",
+            "type": "DateField",
+            "null": true,
+            "blank": true
+          },
+          {
+            "name": "assigned_to",
+            "type": "CharField",
+            "max_length": 100,
+            "blank": true
+          }
+        ]
+      },
+      {
+        "name": "Category",
+        "fields": [
+          {
+            "name": "name",
+            "type": "CharField",
+            "max_length": 50,
+            "unique": true
+          },
+          {
+            "name": "color_code",
+            "type": "CharField",
+            "max_length": 7,
+            "default": "#3b82f6"
+          }
+        ]
+      },
+      {
+        "name": "TaskCategory",
+        "fields": [
+          {
+            "name": "task",
+            "type": "ForeignKey",
+            "to": "Task",
+            "on_delete": "CASCADE"
+          },
+          {
+            "name": "category",
+            "type": "ForeignKey",
+            "to": "Category",
+            "on_delete": "CASCADE"
+          }
+        ]
+      }
+    ],
+    "options": {
+      "timestamps": true
+    }
+  }
+}

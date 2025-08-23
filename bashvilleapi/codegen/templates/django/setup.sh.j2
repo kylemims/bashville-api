@@ -1,0 +1,160 @@
+#!/bin/bash
+# {{ project_title }} - Complete Django Setup Script
+# Auto-generated on {{ generation_date }}
+
+set -e  # Exit on any error
+
+echo "🚀 Setting up {{ project_title }}..."
+
+# Create project directory
+PROJECT_NAME="{{ project_name }}"
+APP_NAME="{{ app_label }}"
+
+# Setup Python virtual environment
+echo "📦 Setting up Python virtual environment..."
+python3 -m venv venv
+source venv/bin/activate
+pip install --upgrade pip
+
+# Install Django dependencies
+echo "📚 Installing Django dependencies..."
+pip install django djangorestframework django-cors-headers python-decouple
+
+# Create Django project structure
+echo "🏗️  Creating Django project structure..."
+django-admin startproject $PROJECT_NAME .
+python manage.py startapp $APP_NAME
+
+# Write generated files
+echo "📝 Writing generated Django files..."
+
+# Copy all the generated files here
+# (This would be populated by your codegen system)
+
+{% if color_palette %}
+# Setup color palette
+echo "🎨 Setting up color palette..."
+mkdir -p styles
+cat > styles/colors.css <<'CSS'
+:root {
+  --primary-color: {{ color_palette.primary_hex }};
+  --secondary-color: {{ color_palette.secondary_hex }};
+  --accent-color: {{ color_palette.accent_hex }};
+  --background-color: {{ color_palette.background_hex }};
+  
+  /* Additional derived colors */
+  --text-color: color-mix(in oklab, var(--background-color) 10%, #000);
+  --surface-color: color-mix(in oklab, var(--background-color) 85%, #fff);
+  --border-color: color-mix(in oklab, var(--background-color) 60%, #fff);
+}
+CSS
+{% endif %}
+
+# Run migrations
+echo "🗄️  Setting up database..."
+python manage.py makemigrations
+python manage.py migrate
+
+# Create superuser
+echo "👤 Creating admin user..."
+echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@{{ project_name }}.com', 'admin123')" | python manage.py shell
+
+# Generate requirements
+echo "📋 Generating requirements.txt..."
+pip freeze > requirements.txt
+
+# Setup git
+echo "🔧 Initializing git repository..."
+git init
+cat > .gitignore << 'EOF'
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py.cover
+.hypothesis/
+.pytest_cache/
+cover/
+*.mo
+*.pot
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+instance/
+.webassets-cache
+.scrapy
+docs/_build/
+.pybuilder/
+target/
+.ipynb_checkpoints
+profile_default/
+ipython_config.py
+.env
+.envrc
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.spyderproject
+.spyproject
+.ropeproject
+/site
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+cython_debug/
+.abstra/
+.ruff_cache/
+.pypirc
+.streamlit/
+EOF
+
+git add .
+git commit -m "Initial {{ project_title }} setup"
+
+echo "✅ {{ project_title }} setup complete!"
+echo ""
+echo "🚀 To start your Django server:"
+echo "   source venv/bin/activate"
+echo "   python manage.py runserver"
+echo ""
+echo "🔧 Admin panel: http://localhost:8000/admin"
+echo "   Username: admin"
+echo "   Password: admin123"
+echo ""
+echo "📚 API endpoint: http://localhost:8000/api/"

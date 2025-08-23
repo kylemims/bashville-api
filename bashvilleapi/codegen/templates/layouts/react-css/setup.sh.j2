@@ -1,0 +1,17 @@
+#!/bin/bash
+# {{ project_title }} - React + Custom CSS Setup
+# Generated on {{ generation_date }}
+
+set -e  # Exit on any error
+
+PROJECT_NAME="{{ project_name }}"
+echo "🚀 Setting up ${PROJECT_NAME} with React + Custom CSS..."
+
+# Create Vite React project
+npm create vite@latest . -- --template react
+npm install
+
+# Install router for navigation
+npm install react-router-dom
+
+echo "📦 Dependencies installed successfully"

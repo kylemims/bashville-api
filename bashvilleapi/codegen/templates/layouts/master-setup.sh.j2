@@ -1,0 +1,187 @@
+#!/bin/bash
+# {{ project_title }} - Complete Project Setup
+# Generated on {{ generation_date }}
+# Project Type: {{ project_type }}
+
+set -e  # Exit on any error
+
+PROJECT_NAME="{{ project_name }}"
+PROJECT_TYPE="{{ project_type }}"
+
+echo "🚀 Setting up {{ project_title }}..."
+echo "📁 Project Type: ${PROJECT_TYPE}"
+
+{% if project_type == 'static-tailwind' or project_type == 'static-css' %}
+# ===== FRONTEND ONLY SETUP =====
+echo "📱 Setting up React frontend..."
+
+# Create Vite React project
+npm create vite@latest . -- --template react
+npm install
+
+{% if project_type == 'static-tailwind' %}
+# Install Tailwind CSS
+echo "🎨 Installing Tailwind CSS..."
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+{% endif %}
+
+# Install router for navigation
+npm install react-router-dom
+
+{% elif project_type == 'fullstack-tailwind' or project_type == 'fullstack-css' %}
+# ===== FULL-STACK SETUP =====
+echo "🏗️  Setting up Full-Stack project..."
+
+# Frontend setup
+mkdir frontend && cd frontend
+npm create vite@latest . -- --template react
+npm install react-router-dom
+
+{% if project_type == 'fullstack-tailwind' %}
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+{% endif %}
+
+cd ..
+
+# Backend setup
+echo "🐍 Setting up Django backend..."
+python3 -m venv venv
+source venv/bin/activate
+pip install --upgrade pip
+pip install django djangorestframework django-cors-headers python-decouple
+
+# Create Django project
+django-admin startproject {{ project_name }}backend .
+python manage.py startapp {{ backend_config.app_label|default:'api' }}
+
+{% endif %}
+
+{% if color_palette %}
+# ===== COLOR PALETTE SETUP =====
+echo "🎨 Setting up color palette..."
+{% if project_type == 'fullstack-tailwind' or project_type == 'fullstack-css' %}
+# Frontend colors
+mkdir -p frontend/src/styles
+cat > frontend/src/styles/colors.css <<'CSS'
+{% else %}
+mkdir -p src/styles  
+cat > src/styles/colors.css <<'CSS'
+{% endif %}
+:root {
+  --color-primary: {{ color_palette.primary_hex }};
+  --color-secondary: {{ color_palette.secondary_hex }};
+  --color-accent: {{ color_palette.accent_hex }};
+  --color-background: {{ color_palette.background_hex }};
+}
+CSS
+
+{% if project_type == 'fullstack-tailwind' or project_type == 'fullstack-css' %}
+# Backend static colors
+mkdir -p styles
+cat > styles/colors.css <<'CSS'
+:root {
+  --primary-color: {{ color_palette.primary_hex }};
+  --secondary-color: {{ color_palette.secondary_hex }};
+  --accent-color: {{ color_palette.accent_hex }};
+  --background-color: {{ color_palette.background_hex }};
+}
+CSS
+{% endif %}
+
+{% endif %}
+
+{% if project_type == 'fullstack-tailwind' or project_type == 'fullstack-css' %}
+# ===== BACKEND CONFIGURATION =====
+{% if backend_config and backend_config.models %}
+echo "🗄️  Setting up database and models..."
+
+# Run migrations
+python manage.py makemigrations
+python manage.py migrate
+
+# Create superuser (optional)
+echo "👤 Creating admin user..."
+echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@{{ project_name }}.com', 'admin123')" | python manage.py shell
+
+echo "✅ Backend setup complete!"
+echo "🔧 Admin panel: http://localhost:8000/admin"
+echo "   Username: admin"
+echo "   Password: admin123"
+{% endif %}
+{% endif %}
+
+# ===== GIT SETUP =====
+echo "🔧 Initializing git repository..."
+cat > .gitignore << 'EOF'
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Production builds
+dist/
+build/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv/
+*.egg-info/
+.pytest_cache/
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+*.log
+local_settings.py
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+EOF
+
+git init
+git add .
+git commit -m "Initial {{ project_title }} setup - Generated with Bash Stash"
+
+# ===== COMPLETION MESSAGE =====
+echo ""
+echo "✅ {{ project_title }} setup complete!"
+echo ""
+echo "🚀 To start development:"
+{% if project_type == 'static-tailwind' or project_type == 'static-css' %}
+echo "   npm run dev"
+echo ""
+echo "📱 Your app will be available at: http://localhost:5173"
+{% elif project_type == 'fullstack-tailwind' or project_type == 'fullstack-css' %}
+echo "   Frontend: cd frontend && npm run dev"
+echo "   Backend:  source venv/bin/activate && python manage.py runserver"
+echo ""
+echo "📱 Frontend: http://localhost:5173"
+echo "🔧 Backend:  http://localhost:8000"
+echo "👤 Admin:    http://localhost:8000/admin"
+{% endif %}
+echo ""
+echo "🎨 Your color palette is ready to use!"
+echo "📚 Happy coding!"

@@ -1,0 +1,12 @@
+# Auto-generated admin configuration
+from django.contrib import admin
+from .models import *
+
+{% for model in models -%}
+@admin.register({{ model.name }})
+class {{ model.name }}Admin(admin.ModelAdmin):
+    list_display = [{% for field in model.fields %}'{{ field.name }}', {% endfor %}{% if timestamps %}'created_at', 'updated_at'{% endif %}]
+    search_fields = [{% for field in model.fields %}{% if field.type in ['CharField', 'TextField', 'EmailField'] %}'{{ field.name }}', {% endif %}{% endfor %}]
+    {% if timestamps %}list_filter = ['created_at', 'updated_at']{% endif %}
+
+{% endfor %}

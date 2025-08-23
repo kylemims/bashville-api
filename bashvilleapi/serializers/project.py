@@ -30,6 +30,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "id",
             "title",
             "description",
+            "project_type",
             "color_palette",
             "color_palette_preview",
             "backend_config",
@@ -41,6 +42,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "title": {"required": False},
             "description": {"required": False},
+            "project_type": {"required": False},
             "backend_config": {"required": False},
         }
 
