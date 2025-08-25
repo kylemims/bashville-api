@@ -3,10 +3,17 @@
 
 :root {
   /* Your custom color palette */
-  --color-primary: {{ palette.primary_hex }};
-  --color-secondary: {{ palette.secondary_hex }};
-  --color-accent: {{ palette.accent_hex }};
-  --color-background: {{ palette.background_hex }};
+  {% if color_palette %}
+  --color-primary: {{ color_palette.primary_hex }};
+  --color-secondary: {{ color_palette.secondary_hex }};
+  --color-accent: {{ color_palette.accent_hex }};
+  --color-background: {{ color_palette.background_hex }};
+  {% else %}
+  --color-primary: #3b82f6;
+  --color-secondary: #1e40af;
+  --color-accent: #06b6d4;
+  --color-background: #f8fafc;
+  {% endif %}
   
   /* Derived colors for better UX */
   --color-text: color-mix(in oklab, var(--color-background) 10%, #000);

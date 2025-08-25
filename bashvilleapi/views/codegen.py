@@ -250,6 +250,27 @@ class CodegenGenerateView(APIView):
         app_label = cfg.get("app_label", "generated_app")
         project_name = slugify(project.title).replace("-", "")
 
+        # Prepare color palette data
+        if project.color_palette:
+            color_palette_data = {
+                "id": project.color_palette.id,
+                "name": project.color_palette.name,
+                "primary_hex": project.color_palette.primary_hex,
+                "secondary_hex": project.color_palette.secondary_hex,
+                "accent_hex": project.color_palette.accent_hex,
+                "background_hex": project.color_palette.background_hex,
+            }
+        else:
+            # Default color palette if none assigned
+            color_palette_data = {
+                "id": None,
+                "name": "Default",
+                "primary_hex": "#3b82f6",
+                "secondary_hex": "#1e40af",
+                "accent_hex": "#06b6d4",
+                "background_hex": "#f8fafc",
+            }
+
         # Template context for all files
         template_context = {
             "project": project,
@@ -259,7 +280,7 @@ class CodegenGenerateView(APIView):
             "app_label": app_label,
             "models": cfg.get("models", []),
             "timestamps": cfg.get("options", {}).get("timestamps", True),
-            "color_palette": project.color_palette_preview,
+            "color_palette": color_palette_data,
             "backend_config": cfg,
             "generation_date": datetime.now().strftime("%Y-%m-%d"),
         }
@@ -285,8 +306,20 @@ class CodegenGenerateView(APIView):
                 get_layout_template_path(layout_folder, "src/App.jsx.j2"),
                 template_context,
             )
+            files[f"{frontend_prefix}src/main.jsx"] = render_template_file(
+                get_layout_template_path(layout_folder, "src/main.jsx.j2"),
+                template_context,
+            )
             files[f"{frontend_prefix}src/index.css"] = render_template_file(
                 get_layout_template_path(layout_folder, "src/index.css.j2"),
+                template_context,
+            )
+            files[f"{frontend_prefix}index.html"] = render_template_file(
+                get_layout_template_path(layout_folder, "index.html.j2"),
+                template_context,
+            )
+            files[f"{frontend_prefix}vite.config.js"] = render_template_file(
+                get_layout_template_path(layout_folder, "vite.config.js.j2"),
                 template_context,
             )
 
@@ -297,17 +330,9 @@ class CodegenGenerateView(APIView):
                 )
 
             # Package.json for frontend
-            files[f"{frontend_prefix}package.json"] = (
-                render_template_file(
-                    get_layout_template_path(layout_folder, "package.json.j2"),
-                    template_context,
-                )
-                if os.path.exists(
-                    get_layout_template_path(layout_folder, "package.json.j2")
-                )
-                else '{\n  "name": "'
-                + project_name
-                + '",\n  "private": true,\n  "version": "0.0.0",\n  "type": "module"\n}'
+            files[f"{frontend_prefix}package.json"] = render_template_file(
+                get_layout_template_path(layout_folder, "package.json.j2"),
+                template_context,
             )
 
         except Exception as e:
@@ -387,13 +412,18 @@ class CodegenGenerateView(APIView):
             )
             setup_steps = ["chmod +x setup.sh", "./setup.sh", "npm run dev"]
 
+        # Convert files dictionary to list of file objects
+        files_list = [
+            {"path": path, "content": content} for path, content in files.items()
+        ]
+
         return Response(
             {
                 "project_id": project.id,
                 "project_name": project_name,
                 "project_type": project.project_type,
                 "app_label": app_label,
-                "files": files,
+                "files": files_list,
                 "setup_instructions": {
                     "message": setup_message,
                     "steps": setup_steps,

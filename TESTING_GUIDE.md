@@ -43,13 +43,13 @@ curl -X POST -H "Authorization: Token $TOKEN" \
 curl -X POST -H "Authorization: Token $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"project_id": 1}' \
-  http://127.0.0.1:8000/codegen/generate/
+  http://127.0.0.1:8000/codegen/generate
 ```
 
 ### 4. Expected Response Validation
 Verify the generation response includes:
 - `project_type` field matches request
-- `files` object contains appropriate templates
+- `files` array contains appropriate templates
 - `setup_instructions` are project-type specific
 - Generated code includes color palette variables
 

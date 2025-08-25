@@ -75,7 +75,7 @@ Authorization: Token <user_token>
 
 ## Code Generation Endpoint
 
-### POST /codegen/generate/
+### POST /codegen/generate
 **Purpose**: Generate complete project files
 **Request Body**:
 ```json
@@ -91,13 +91,40 @@ Authorization: Token <user_token>
   "project_name": "mynewproject",
   "project_type": "static-tailwind",
   "app_label": "my_app",
-  "files": {
-    "src/App.jsx": "import React from 'react';\n\nfunction App() {\n  return (\n    <div className=\"min-h-screen bg-[#f8fafc]\">\n      <header className=\"bg-[#3b82f6] text-white p-6\">\n        <h1 className=\"text-3xl font-bold\">My New Project</h1>\n      </header>\n      <main className=\"container mx-auto p-6\">\n        <p className=\"text-[#1e40af]\">Welcome to your generated project!</p>\n      </main>\n    </div>\n  );\n}\n\nexport default App;",
-    "src/index.css": "@tailwind base;\n@tailwind components;\n@tailwind utilities;\n\n:root {\n  --color-primary: #3b82f6;\n  --color-secondary: #1e40af;\n  --color-accent: #06b6d4;\n  --color-background: #f8fafc;\n}",
-    "tailwind.config.js": "/** @type {import('tailwindcss').Config} */\nexport default {\n  content: [\n    \"./index.html\",\n    \"./src/**/*.{js,ts,jsx,tsx}\",\n  ],\n  theme: {\n    extend: {\n      colors: {\n        primary: '#3b82f6',\n        secondary: '#1e40af',\n        accent: '#06b6d4',\n        background: '#f8fafc'\n      }\n    },\n  },\n  plugins: [],\n}",
-    "package.json": "{\n  \"name\": \"mynewproject\",\n  \"private\": true,\n  \"version\": \"0.0.0\",\n  \"type\": \"module\",\n  \"scripts\": {\n    \"dev\": \"vite\",\n    \"build\": \"vite build\",\n    \"preview\": \"vite preview\"\n  },\n  \"dependencies\": {\n    \"react\": \"^18.2.0\",\n    \"react-dom\": \"^18.2.0\"\n  },\n  \"devDependencies\": {\n    \"@types/react\": \"^18.2.15\",\n    \"@types/react-dom\": \"^18.2.7\",\n    \"@vitejs/plugin-react\": \"^4.0.3\",\n    \"autoprefixer\": \"^10.4.14\",\n    \"postcss\": \"^8.4.27\",\n    \"tailwindcss\": \"^3.3.3\",\n    \"vite\": \"^4.4.5\"\n  }\n}",
-    "setup.sh": "#!/bin/bash\n\n# Auto-generated setup script for mynewproject\n# Project Type: static-tailwind\n# Generated: 2025-08-23\n\necho \"🚀 Setting up mynewproject (Static React + Tailwind)...\"\n\n# Install dependencies\necho \"📦 Installing dependencies...\"\nnpm install\n\necho \"✅ Setup complete!\"\necho \"\"\necho \"🎯 To start development:\"\necho \"   npm run dev\"\necho \"\"\necho \"🏗️  To build for production:\"\necho \"   npm run build\"\necho \"\"\necho \"📁 Project structure:\"\necho \"   src/App.jsx     - Main React component\"\necho \"   src/index.css   - Tailwind CSS with color variables\"\necho \"   tailwind.config.js - Tailwind configuration with your colors\"\n"
-  },
+  "files": [
+    {
+      "path": "src/App.jsx",
+      "content": "import React from 'react';\n\nfunction App() {\n  return (\n    <div className=\"min-h-screen bg-[#f8fafc]\">\n      <header className=\"bg-[#3b82f6] text-white p-6\">\n        <h1 className=\"text-3xl font-bold\">My New Project</h1>\n      </header>\n      <main className=\"container mx-auto p-6\">\n        <p className=\"text-[#1e40af]\">Welcome to your generated project!</p>\n      </main>\n    </div>\n  );\n}\n\nexport default App;"
+    },
+    {
+      "path": "src/index.css",
+      "content": "@tailwind base;\n@tailwind components;\n@tailwind utilities;\n\n:root {\n  --color-primary: #3b82f6;\n  --color-secondary: #1e40af;\n  --color-accent: #06b6d4;\n  --color-background: #f8fafc;\n}"
+    },
+    {
+      "path": "src/main.jsx",
+      "content": "import React from 'react'\nimport ReactDOM from 'react-dom/client'\nimport App from './App.jsx'\nimport './index.css'\n\nReactDOM.createRoot(document.getElementById('root')).render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>,\n)"
+    },
+    {
+      "path": "index.html",
+      "content": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <link rel=\"icon\" type=\"image/svg+xml\" href=\"/vite.svg\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <title>My New Project</title>\n  </head>\n  <body>\n    <div id=\"root\"></div>\n    <script type=\"module\" src=\"/src/main.jsx\"></script>\n  </body>\n</html>"
+    },
+    {
+      "path": "package.json",
+      "content": "{\n  \"name\": \"mynewproject\",\n  \"private\": true,\n  \"version\": \"0.0.0\",\n  \"type\": \"module\",\n  \"scripts\": {\n    \"dev\": \"vite\",\n    \"build\": \"vite build\",\n    \"preview\": \"vite preview\"\n  },\n  \"dependencies\": {\n    \"react\": \"^18.2.0\",\n    \"react-dom\": \"^18.2.0\"\n  },\n  \"devDependencies\": {\n    \"@types/react\": \"^18.2.15\",\n    \"@types/react-dom\": \"^18.2.7\",\n    \"@vitejs/plugin-react\": \"^4.0.3\",\n    \"autoprefixer\": \"^10.4.14\",\n    \"postcss\": \"^8.4.27\",\n    \"tailwindcss\": \"^3.3.3\",\n    \"vite\": \"^4.4.5\"\n  }\n}"
+    },
+    {
+      "path": "vite.config.js",
+      "content": "import { defineConfig } from 'vite'\nimport react from '@vitejs/plugin-react'\n\nexport default defineConfig({\n  plugins: [react()],\n})"
+    },
+    {
+      "path": "tailwind.config.js",
+      "content": "/** @type {import('tailwindcss').Config} */\nexport default {\n  content: [\n    \"./index.html\",\n    \"./src/**/*.{js,ts,jsx,tsx}\",\n  ],\n  theme: {\n    extend: {\n      colors: {\n        primary: '#3b82f6',\n        secondary: '#1e40af',\n        accent: '#06b6d4',\n        background: '#f8fafc'\n      }\n    },\n  },\n  plugins: [],\n}"
+    },
+    {
+      "path": "setup.sh",
+      "content": "#!/bin/bash\n\n# Auto-generated setup script for mynewproject\n# Project Type: static-tailwind\n# Generated: 2025-08-25\n\necho \"🚀 Setting up mynewproject (Static React + Tailwind)...\"\n\n# Install dependencies\necho \"📦 Installing dependencies...\"\nnpm install\n\necho \"✅ Setup complete!\"\necho \"\"\necho \"🎯 To start development:\"\necho \"   npm run dev\"\necho \"\"\necho \"🏗️  To build for production:\"\necho \"   npm run build\"\necho \"\"\necho \"📁 Project structure:\"\necho \"   src/App.jsx     - Main React component\"\necho \"   src/index.css   - Tailwind CSS with color variables\"\necho \"   tailwind.config.js - Tailwind configuration with your colors\"\n"
+    }
+  ],
   "setup_instructions": {
     "message": "Static React project generated! Ready for frontend development.",
     "steps": [
