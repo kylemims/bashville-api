@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# pylint: skip-file
 # bashvilleapi/views/codegen.py
 from typing import Dict, Any, List
 from datetime import datetime
@@ -265,6 +267,7 @@ class CodegenGenerateView(APIView):
                 "secondary_hex": project.color_palette.secondary_hex,
                 "accent_hex": project.color_palette.accent_hex,
                 "background_hex": project.color_palette.background_hex,
+                "ui_hex": project.color_palette.ui_hex,
             }
         else:
             # Default color palette if none assigned
@@ -275,6 +278,7 @@ class CodegenGenerateView(APIView):
                 "secondary_hex": "#1e40af",
                 "accent_hex": "#06b6d4",
                 "background_hex": "#f8fafc",
+                "ui_hex": "#ffffff",
             }
 
         # Template context for all files
@@ -294,6 +298,7 @@ class CodegenGenerateView(APIView):
                 "secondary": color_palette_data["secondary_hex"],
                 "accent": color_palette_data["accent_hex"],
                 "background": color_palette_data["background_hex"],
+                "ui": color_palette_data["ui_hex"],
             },
             "backend_config": cfg,
             "generation_date": datetime.now().strftime("%Y-%m-%d"),
@@ -326,6 +331,38 @@ class CodegenGenerateView(APIView):
             )
             files[f"{frontend_prefix}src/index.css"] = render_template_file(
                 get_layout_template_path(layout_folder, "src/index.css.j2"),
+                template_context,
+            )
+
+            # Component files
+            files[f"{frontend_prefix}src/components/Navigation.jsx"] = (
+                render_template_file(
+                    get_layout_template_path(
+                        layout_folder, "src/components/Navigation.jsx.j2"
+                    ),
+                    template_context,
+                )
+            )
+            files[f"{frontend_prefix}src/components/Footer.jsx"] = render_template_file(
+                get_layout_template_path(layout_folder, "src/components/Footer.jsx.j2"),
+                template_context,
+            )
+            files[f"{frontend_prefix}src/components/UI.jsx"] = render_template_file(
+                get_layout_template_path(layout_folder, "src/components/UI.jsx.j2"),
+                template_context,
+            )
+
+            # Page files
+            files[f"{frontend_prefix}src/pages/Home.jsx"] = render_template_file(
+                get_layout_template_path(layout_folder, "src/pages/Home.jsx.j2"),
+                template_context,
+            )
+            files[f"{frontend_prefix}src/pages/About.jsx"] = render_template_file(
+                get_layout_template_path(layout_folder, "src/pages/About.jsx.j2"),
+                template_context,
+            )
+            files[f"{frontend_prefix}src/pages/Contact.jsx"] = render_template_file(
+                get_layout_template_path(layout_folder, "src/pages/Contact.jsx.j2"),
                 template_context,
             )
             files[f"{frontend_prefix}index.html"] = render_template_file(

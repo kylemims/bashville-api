@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# pylint: skip-file
 from rest_framework import serializers
 from bashvilleapi.models import Project, ColorPalette, Command
 

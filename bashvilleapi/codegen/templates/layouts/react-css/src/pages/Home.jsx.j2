@@ -1,0 +1,32 @@
+export const Home = () => {
+  return (
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-background)' }}>
+      <section style={{ 
+        background: `linear-gradient(135deg, var(--color-primary), var(--color-secondary))`,
+        color: 'white',
+        padding: '5rem 0',
+        textAlign: 'center'
+      }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem' }}>
+          <h1 style={{ fontSize: '3rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>
+            Welcome to {{ project_title }}
+          </h1>
+          <p style={{ fontSize: '1.25rem', marginBottom: '2rem', opacity: 0.9 }}>
+            Your project is ready to go! Start building something amazing.
+          </p>
+        </div>
+      </section>
+      
+      <section style={{ padding: '4rem 0' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '2rem', marginBottom: '2rem', color: 'var(--color-primary)' }}>
+            CSS Layout - Under Development
+          </h2>
+          <p style={{ color: '#666', fontSize: '1.125rem' }}>
+            This is a placeholder for the CSS layout. The full modular structure will be implemented after the Tailwind version is tested.
+          </p>
+        </div>
+      </section>
+    </div>
+  )
+}

@@ -1,0 +1,34 @@
+export const Card = ({ children, className = "" }) => {
+  return (
+    <div className={`card ${className}`}>
+      {children}
+    </div>
+  )
+}
+
+export const Button = ({ 
+  children, 
+  variant = "primary", 
+  onClick, 
+  className = "",
+  ...props 
+}) => {
+  const baseClasses = "px-6 py-3 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+  
+  const variants = {
+    primary: "btn-primary focus:ring-primary",
+    secondary: "btn-secondary focus:ring-secondary", 
+    accent: "btn-accent focus:ring-accent",
+    outline: "border-2 border-primary text-primary hover:bg-primary hover:text-white focus:ring-primary"
+  }
+
+  return (
+    <button
+      onClick={onClick}
+      className={`${baseClasses} ${variants[variant]} ${className}`}
+      {...props}
+    >
+      {children}
+    </button>
+  )
+}

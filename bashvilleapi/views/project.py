@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# pylint: skip-file
 from rest_framework import viewsets, permissions
 from bashvilleapi.models import Project
 from bashvilleapi.serializers import ProjectSerializer

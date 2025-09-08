@@ -9,6 +9,7 @@
     --color-secondary: {{ color_palette.secondary_hex }};
     --color-accent: {{ color_palette.accent_hex }};
     --color-background: {{ color_palette.background_hex }};
+    --color-ui: {{ color_palette.ui_hex }};
   }
   
   body {
@@ -33,7 +34,7 @@
   }
   
   .card {
-    @apply bg-white rounded-xl shadow-lg p-6 border border-gray-100;
+    @apply bg-ui rounded-xl shadow-lg p-6 border border-gray-100;
   }
   
   .container-main {

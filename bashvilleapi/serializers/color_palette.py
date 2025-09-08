@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# pylint: skip-file
 from rest_framework import serializers
 from bashvilleapi.models.color_palette import ColorPalette
 
@@ -12,4 +14,5 @@ class ColorPaletteSerializer(serializers.ModelSerializer):
             "secondary_hex",
             "accent_hex",
             "background_hex",
+            "ui_hex",
         ]

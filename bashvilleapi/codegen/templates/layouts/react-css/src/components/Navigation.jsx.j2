@@ -1,0 +1,72 @@
+import { useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+
+export const Navigation = () => {
+  const [isOpen, setIsOpen] = useState(false)
+  const location = useLocation()
+
+  const toggleMenu = () => setIsOpen(!isOpen)
+
+  const navLinks = [
+    { to: '/', label: 'Home' },
+    { to: '/about', label: 'About' },
+    { to: '/contact', label: 'Contact' }
+  ]
+
+  const isActive = (path) => location.pathname === path
+
+  return (
+    <nav className="navbar">
+      <div className="nav-container">
+        <div className="nav-content">
+          {/* Logo/Title */}
+          <Link to="/" className="nav-logo">
+            {{ project_title }}
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="nav-links-desktop">
+            {navLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className={`nav-link ${isActive(link.to) ? 'nav-link-active' : ''}`}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+
+          {/* Mobile Hamburger Button */}
+          <button
+            onClick={toggleMenu}
+            className="hamburger-btn"
+            aria-label="Toggle navigation menu"
+          >
+            <div className="hamburger-icon">
+              <span className={`hamburger-line ${isOpen ? 'hamburger-line-1-open' : 'hamburger-line-1'}`} />
+              <span className={`hamburger-line ${isOpen ? 'hamburger-line-2-open' : 'hamburger-line-2'}`} />
+              <span className={`hamburger-line ${isOpen ? 'hamburger-line-3-open' : 'hamburger-line-3'}`} />
+            </div>
+          </button>
+        </div>
+
+        {/* Mobile Navigation Menu */}
+        <div className={`nav-links-mobile ${isOpen ? 'nav-links-mobile-open' : ''}`}>
+          <div className="nav-mobile-content">
+            {navLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                onClick={() => setIsOpen(false)}
+                className={`nav-link-mobile ${isActive(link.to) ? 'nav-link-mobile-active' : ''}`}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+    </nav>
+  )
+}

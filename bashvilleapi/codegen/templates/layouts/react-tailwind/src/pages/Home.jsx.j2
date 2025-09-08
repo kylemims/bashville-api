@@ -1,0 +1,104 @@
+import { useState } from 'react'
+import { Card, Button } from '../components/UI'
+
+export const Home = () => {
+  const [count, setCount] = useState(0)
+
+  const features = [
+    {
+      title: "Fast Setup",
+      description: "Your project was generated with best practices and is ready for development."
+    },
+    {
+      title: "Responsive Design", 
+      description: "Built mobile-first with Tailwind CSS for beautiful, responsive layouts."
+    },
+    {
+      title: "Custom Colors",
+      description: "Your selected color palette is already integrated and ready to use."
+    }
+  ]
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-primary to-secondary text-white py-20">
+        <div className="container-main text-center">
+          <h1 className="text-5xl font-bold mb-6">Welcome to {{ project_title }}</h1>
+          <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
+            Your project is ready to go! Start building something amazing with this 
+            fully configured React + Tailwind CSS setup.
+          </p>
+          <div className="space-x-4">
+            <Button variant="accent" className="text-lg px-8 py-4">
+              Get Started
+            </Button>
+            <Button 
+              variant="outline" 
+              className="bg-ui text-primary border-ui hover:bg-gray-100 text-lg px-8 py-4"
+            >
+              Learn More
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-16">
+        <div className="container-main">
+          <h2 className="text-3xl font-bold text-center text-primary mb-12">
+            What's Included
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            {features.map((feature, index) => (
+              <Card key={index}>
+                <h3 className="text-xl font-semibold text-primary mb-4">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600">
+                  {feature.description}
+                </p>
+              </Card>
+            ))}
+          </div>
+
+          {/* Interactive Demo */}
+          <div className="text-center">
+            <Card className="inline-block max-w-md">
+              <h3 className="text-xl font-semibold mb-4">Interactive Demo</h3>
+              <p className="mb-6 text-gray-600">
+                Click the buttons to see your custom colors in action:
+              </p>
+              <div className="space-y-3">
+                <div className="flex flex-wrap gap-3 justify-center">
+                  <Button 
+                    variant="primary"
+                    onClick={() => setCount(count + 1)}
+                  >
+                    Primary ({count})
+                  </Button>
+                  <Button 
+                    variant="secondary"
+                    onClick={() => setCount(count + 1)}
+                  >
+                    Secondary
+                  </Button>
+                  <Button 
+                    variant="accent"
+                    onClick={() => setCount(count + 1)}
+                  >
+                    Accent
+                  </Button>
+                </div>
+                <p className="text-sm text-gray-500">
+                  Button clicks: {count}
+                </p>
+              </div>
+            </Card>
+          </div>
+        </div>
+      </section>
+    </div>
+  )
+}

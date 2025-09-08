@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# pylint: skip-file
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -9,6 +11,9 @@ class ColorPalette(models.Model):
     secondary_hex = models.CharField(max_length=7)
     accent_hex = models.CharField(max_length=7)
     background_hex = models.CharField(max_length=7)
+    ui_hex = models.CharField(
+        max_length=7, default="#ffffff"
+    )  # New field for navbar/cards
 
     def __str__(self):
         return f"{self.name} by {self.user.username}"

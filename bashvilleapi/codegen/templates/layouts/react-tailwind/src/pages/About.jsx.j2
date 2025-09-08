@@ -1,0 +1,172 @@
+import { Card } from '../components/UI'
+
+export const About = () => {
+  const fileStructure = [
+    { name: "src/", description: "Main source code directory" },
+    { name: "├── components/", description: "Reusable UI components" },
+    { name: "├── pages/", description: "Page components for routing" },
+    { name: "├── App.jsx", description: "Main application component with routing" },
+    { name: "├── main.jsx", description: "Application entry point" },
+    { name: "└── index.css", description: "Global styles and Tailwind imports" }
+  ]
+
+  const gettingStarted = [
+    {
+      title: "Add New Pages",
+      steps: [
+        "Create a new component in src/pages/",
+        "Import it in App.jsx",
+        "Add a new route to the Routes component",
+        "Add navigation link in Navigation.jsx"
+      ]
+    },
+    {
+      title: "Create Components", 
+      steps: [
+        "Add new files in src/components/",
+        "Use arrow function syntax: export const MyComponent = () => {}",
+        "Import and use in your pages",
+        "Follow the existing component patterns"
+      ]
+    },
+    {
+      title: "Customize Styles",
+      steps: [
+        "Your color palette is defined in tailwind.config.js",
+        "Use custom classes: bg-primary, text-secondary, etc.",
+        "Add custom CSS in src/index.css",
+        "Follow Tailwind CSS documentation for more utilities"
+      ]
+    }
+  ]
+
+  return (
+    <div className="min-h-screen bg-background py-12">
+      <div className="container-main">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-primary mb-4">
+            About {{ project_title }}
+          </h1>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Learn about your project structure and how to extend it
+          </p>
+        </div>
+
+        {/* Project Overview */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+          <Card>
+            <h2 className="text-2xl font-semibold text-primary mb-4">
+              🚀 Project Overview
+            </h2>
+            <p className="text-gray-600 mb-4">
+              This is a modern React application built with:
+            </p>
+            <ul className="space-y-2 text-gray-600">
+              <li className="flex items-center">
+                <span className="w-2 h-2 bg-primary rounded-full mr-3"></span>
+                <strong>React 18</strong> - Modern React with hooks
+              </li>
+              <li className="flex items-center">
+                <span className="w-2 h-2 bg-secondary rounded-full mr-3"></span>
+                <strong>Tailwind CSS</strong> - Utility-first CSS framework
+              </li>
+              <li className="flex items-center">
+                <span className="w-2 h-2 bg-accent rounded-full mr-3"></span>
+                <strong>React Router</strong> - Client-side routing
+              </li>
+              <li className="flex items-center">
+                <span className="w-2 h-2 bg-primary rounded-full mr-3"></span>
+                <strong>Vite</strong> - Fast development and build tool
+              </li>
+            </ul>
+          </Card>
+
+          <Card>
+            <h2 className="text-2xl font-semibold text-primary mb-4">
+              🎨 Your Color Palette
+            </h2>
+            <p className="text-gray-600 mb-4">
+              Your custom colors are available as Tailwind classes:
+            </p>
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-primary rounded"></div>
+                <span className="font-mono text-sm">bg-primary</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-secondary rounded"></div>
+                <span className="font-mono text-sm">bg-secondary</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-accent rounded"></div>
+                <span className="font-mono text-sm">bg-accent</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-background border-2 border-gray-200 rounded"></div>
+                <span className="font-mono text-sm">bg-background</span>
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        {/* File Structure */}
+        <Card className="mb-12">
+          <h2 className="text-2xl font-semibold text-primary mb-6">
+            📁 File Structure
+          </h2>
+          <div className="bg-gray-900 text-green-400 p-6 rounded-lg font-mono text-sm overflow-x-auto">
+            {fileStructure.map((file, index) => (
+              <div key={index} className="mb-1">
+                <span className="text-yellow-400">{file.name}</span>
+                <span className="text-gray-400 ml-4">// {file.description}</span>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        {/* Getting Started Guide */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {gettingStarted.map((section, index) => (
+            <Card key={index}>
+              <h3 className="text-xl font-semibold text-primary mb-4">
+                {section.title}
+              </h3>
+              <ol className="space-y-2">
+                {section.steps.map((step, stepIndex) => (
+                  <li key={stepIndex} className="flex items-start">
+                    <span className="flex-shrink-0 w-6 h-6 bg-primary text-white text-sm rounded-full flex items-center justify-center mr-3 mt-0.5">
+                      {stepIndex + 1}
+                    </span>
+                    <span className="text-gray-600 text-sm">{step}</span>
+                  </li>
+                ))}
+              </ol>
+            </Card>
+          ))}
+        </div>
+
+        {/* Quick Commands */}
+        <Card className="mt-8 bg-blue-50 border-blue-200">
+          <h3 className="text-xl font-semibold text-primary mb-4">
+            ⚡ Quick Commands
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <p className="font-semibold text-gray-700 mb-2">Development:</p>
+              <code className="bg-gray-900 text-green-400 px-3 py-1 rounded text-sm">
+                npm run dev
+              </code>
+            </div>
+            <div>
+              <p className="font-semibold text-gray-700 mb-2">Build for production:</p>
+              <code className="bg-gray-900 text-green-400 px-3 py-1 rounded text-sm">
+                npm run build
+              </code>
+            </div>
+          </div>
+        </Card>
+      </div>
+    </div>
+  )
+}

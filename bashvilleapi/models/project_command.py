@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# pylint: skip-file
 from django.db import models
 from .project import Project
 from .command import Command

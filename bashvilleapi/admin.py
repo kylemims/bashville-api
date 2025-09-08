@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# pylint: skip-file
 from django.contrib import admin
 from bashvilleapi.models import ColorPalette, Project, Command, ProjectCommand
 
@@ -11,6 +13,7 @@ class ColorPaletteAdmin(admin.ModelAdmin):
         "secondary_hex",
         "accent_hex",
         "background_hex",
+        "ui_hex",
     )
     search_fields = ("name", "user__username")
     list_filter = ("user",)

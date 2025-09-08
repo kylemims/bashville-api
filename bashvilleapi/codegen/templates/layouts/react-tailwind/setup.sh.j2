@@ -7,7 +7,7 @@ set -e  # Exit on any error
 echo "🚀 Setting up {{ project_title }} with React + Tailwind..."
 echo "📦 Installing dependencies..."
 
-# Install all dependencies from package.json
+# Install all dependencies from package.json (includes React Router)
 npm install
 
 echo ""
@@ -16,4 +16,10 @@ echo ""
 echo "🎉 Your project is ready!"
 echo "📁 Run 'npm run dev' to start the development server"
 echo "🌐 Then open http://localhost:5173 in your browser"
+echo ""
+echo "🧭 Navigation includes:"
+echo "   • Home page with interactive demo"
+echo "   • About page with project documentation" 
+echo "   • Contact page with working form"
+echo "   • Mobile-responsive hamburger menu"
 echo ""

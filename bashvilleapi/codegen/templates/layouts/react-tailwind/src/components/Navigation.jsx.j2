@@ -1,0 +1,96 @@
+import { useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+
+export const Navigation = () => {
+  const [isOpen, setIsOpen] = useState(false)
+  const location = useLocation()
+
+  const toggleMenu = () => setIsOpen(!isOpen)
+
+  const navLinks = [
+    { to: '/', label: 'Home' },
+    { to: '/about', label: 'About' },
+    { to: '/contact', label: 'Contact' }
+  ]
+
+  const isActive = (path) => location.pathname === path
+
+  return (
+    <nav className="bg-ui shadow-sm border-b sticky top-0 z-50">
+      <div className="container-main">
+        <div className="flex justify-between items-center py-4">
+          {/* Logo/Title */}
+          <Link to="/" className="text-2xl font-bold text-primary hover:opacity-90 transition-opacity">
+            {{ project_title }}
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex space-x-6">
+            {navLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className={`transition-colors font-medium ${
+                  isActive(link.to)
+                    ? 'text-primary border-b-2 border-primary'
+                    : 'text-gray-600 hover:text-primary'
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+
+          {/* Mobile Hamburger Button */}
+          <button
+            onClick={toggleMenu}
+            className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            aria-label="Toggle navigation menu"
+          >
+            <div className="w-6 h-6 relative">
+              <span
+                className={`absolute h-0.5 w-6 bg-gray-600 transition-all duration-300 ${
+                  isOpen ? 'rotate-45 top-3' : 'top-1'
+                }`}
+              />
+              <span
+                className={`absolute h-0.5 w-6 bg-gray-600 transition-all duration-300 top-3 ${
+                  isOpen ? 'opacity-0' : 'opacity-100'
+                }`}
+              />
+              <span
+                className={`absolute h-0.5 w-6 bg-gray-600 transition-all duration-300 ${
+                  isOpen ? '-rotate-45 top-3' : 'top-5'
+                }`}
+              />
+            </div>
+          </button>
+        </div>
+
+        {/* Mobile Navigation Menu */}
+        <div
+          className={`md:hidden transition-all duration-300 overflow-hidden ${
+            isOpen ? 'max-h-64 pb-4' : 'max-h-0'
+          }`}
+        >
+          <div className="space-y-2 pt-2">
+            {navLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                onClick={() => setIsOpen(false)}
+                className={`block px-4 py-2 rounded-lg transition-colors font-medium ${
+                  isActive(link.to)
+                    ? 'bg-primary text-white'
+                    : 'text-gray-600 hover:bg-gray-100 hover:text-primary'
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+    </nav>
+  )
+}
