@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{{ project_title | default:'Django Demo' }}</title>
+    <title>{{ project_title | default("Django Demo") }}</title>
     
     <!-- Color palette CSS - loads from static files -->
     <link rel="stylesheet" href="{% static 'colors.css' %}">

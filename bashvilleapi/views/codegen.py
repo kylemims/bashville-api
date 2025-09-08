@@ -2,12 +2,12 @@
 from typing import Dict, Any, List
 from datetime import datetime
 from django.utils.text import slugify
-from django.template import Template, Context
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from bashvilleapi.models import Project
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 import os
 
 # ---- tiny helpers -----------------------------------------------------------
@@ -16,13 +16,19 @@ import os
 def render_template_file(template_path: str, context: Dict) -> str:
     """Render a Jinja2 template file with the given context."""
     try:
-        with open(template_path, "r", encoding="utf-8") as f:
-            template_content = f.read()
+        # Set up Jinja2 environment
+        template_dir = os.path.dirname(template_path)
+        template_name = os.path.basename(template_path)
 
-        # Use Django's template system since we're in Django
-        template = Template(template_content)
-        django_context = Context(context)
-        return template.render(django_context)
+        env = Environment(
+            loader=FileSystemLoader(template_dir),
+            autoescape=select_autoescape(enabled_extensions=("html", "j2")),
+            trim_blocks=True,
+            lstrip_blocks=True,
+        )
+
+        template = env.get_template(template_name)
+        return template.render(**context)
     except Exception as e:
         return f"# Error rendering template: {e}"
 
@@ -276,11 +282,19 @@ class CodegenGenerateView(APIView):
             "project": project,
             "project_title": project.title,
             "project_name": project_name,
+            "project_description": f"Generated {project.title} App",
             "project_type": project.project_type,
             "app_label": app_label,
             "models": cfg.get("models", []),
             "timestamps": cfg.get("options", {}).get("timestamps", True),
             "color_palette": color_palette_data,
+            # Add palette context for compatibility with templates
+            "palette": {
+                "primary": color_palette_data["primary_hex"],
+                "secondary": color_palette_data["secondary_hex"],
+                "accent": color_palette_data["accent_hex"],
+                "background": color_palette_data["background_hex"],
+            },
             "backend_config": cfg,
             "generation_date": datetime.now().strftime("%Y-%m-%d"),
         }
@@ -328,6 +342,12 @@ class CodegenGenerateView(APIView):
                     get_layout_template_path(layout_folder, "tailwind.config.js.j2"),
                     template_context,
                 )
+
+            # Always include PostCSS config for CSS processing
+            files[f"{frontend_prefix}postcss.config.js"] = render_template_file(
+                get_layout_template_path(layout_folder, "postcss.config.js.j2"),
+                template_context,
+            )
 
             # Package.json for frontend
             files[f"{frontend_prefix}package.json"] = render_template_file(
@@ -377,19 +397,23 @@ class CodegenGenerateView(APIView):
             except Exception as e:
                 files["_backend_error"] = f"Backend template error: {e}"
 
-        # ===== MASTER SETUP SCRIPT =====
+        # ===== SETUP SCRIPT =====
         try:
-            master_setup_path = os.path.join(
-                os.path.dirname(__file__),
-                "..",
-                "codegen",
-                "templates",
-                "layouts",
-                "master-setup.sh.j2",
-            )
-            files["setup.sh"] = render_template_file(
-                master_setup_path, template_context
-            )
+            if is_fullstack:
+                # Use master setup for fullstack projects
+                setup_path = os.path.join(
+                    os.path.dirname(__file__),
+                    "..",
+                    "codegen",
+                    "templates",
+                    "layouts",
+                    "fullstack-setup.sh.j2",
+                )
+            else:
+                # Use layout-specific setup for static projects
+                setup_path = get_layout_template_path(layout_folder, "setup.sh.j2")
+
+            files["setup.sh"] = render_template_file(setup_path, template_context)
         except Exception as e:
             files["setup.sh"] = (
                 f"#!/bin/bash\n# Setup script generation error: {e}\necho 'Please check your project configuration'"

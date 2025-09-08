@@ -1,0 +1,93 @@
+import { useState } from 'react'
+import './App.css'
+
+function App() {
+  const [count, setCount] = useState(0)
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Navigation */}
+      <nav className="bg-white shadow-sm border-b">
+        <div className="container-main">
+          <div className="flex justify-between items-center py-4">
+            <h1 className="text-2xl font-bold text-primary">Blog Demo with Categories</h1>
+            <div className="hidden md:flex space-x-6">
+              <a href="#home" className="text-gray-600 hover:text-primary transition-colors">Home</a>
+              <a href="#about" className="text-gray-600 hover:text-primary transition-colors">About</a>
+              <a href="#contact" className="text-gray-600 hover:text-primary transition-colors">Contact</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-primary to-secondary text-white py-20">
+        <div className="container-main text-center">
+          <h1 className="text-5xl font-bold mb-6">Welcome to Blog Demo with Categories</h1>
+          <p className="text-xl mb-8 opacity-90">Your project is ready to go! Start building something amazing.</p>
+          <div className="space-x-4">
+            <button className="btn-accent">Get Started</button>
+            <button className="bg-white text-primary px-6 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity">
+              Learn More
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Content Section */}
+      <section className="py-16">
+        <div className="container-main">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="card">
+              <h3 className="text-xl font-semibold text-primary mb-4">Fast Setup</h3>
+              <p className="text-gray-600">Your project was generated with best practices and is ready for development.</p>
+            </div>
+            <div className="card">
+              <h3 className="text-xl font-semibold text-primary mb-4">Responsive Design</h3>
+              <p className="text-gray-600">Built mobile-first with Tailwind CSS for beautiful, responsive layouts.</p>
+            </div>
+            <div className="card">
+              <h3 className="text-xl font-semibold text-primary mb-4">Custom Colors</h3>
+              <p className="text-gray-600">Your selected color palette is already integrated and ready to use.</p>
+            </div>
+          </div>
+
+          {/* Interactive Demo */}
+          <div className="mt-16 text-center">
+            <div className="card inline-block">
+              <h3 className="text-xl font-semibold mb-4">Interactive Demo</h3>
+              <p className="mb-4">Click the button to see your colors in action:</p>
+              <button 
+                onClick={() => setCount((count) => count + 1)}
+                className="btn-primary mr-4"
+              >
+                Primary ({count})
+              </button>
+              <button 
+                onClick={() => setCount((count) => count + 1)}
+                className="btn-secondary mr-4"
+              >
+                Secondary
+              </button>
+              <button 
+                onClick={() => setCount((count) => count + 1)}
+                className="btn-accent"
+              >
+                Accent
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-8">
+        <div className="container-main text-center">
+          <p>&copy; 2025 Blog Demo with Categories. Generated with Bash Stash.</p>
+        </div>
+      </footer>
+    </div>
+  )
+}
+
+export default App

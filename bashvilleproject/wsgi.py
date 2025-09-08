@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# pylint: skip-file
 """
 WSGI config for bashvilleproject project.
 

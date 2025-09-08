@@ -1,0 +1,19 @@
+// tailwind.config.js - Tailwind CSS configuration
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        primary: '{{ palette.primary }}',
+        secondary: '{{ palette.secondary }}',
+        accent: '{{ palette.accent }}',
+        background: '{{ palette.background }}',
+      },
+    },
+  },
+  plugins: [],
+}

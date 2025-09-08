@@ -54,7 +54,7 @@ pip install django djangorestframework django-cors-headers python-decouple
 
 # Create Django project
 django-admin startproject {{ project_name }}backend .
-python manage.py startapp {{ backend_config.app_label|default:'api' }}
+python manage.py startapp {{ backend_config.app_label|default("api") }}
 
 {% endif %}
 

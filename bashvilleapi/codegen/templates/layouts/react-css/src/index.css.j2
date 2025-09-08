@@ -3,17 +3,10 @@
 
 :root {
   /* Your custom color palette */
-  {% if color_palette %}
-  --color-primary: {{ color_palette.primary_hex }};
-  --color-secondary: {{ color_palette.secondary_hex }};
-  --color-accent: {{ color_palette.accent_hex }};
-  --color-background: {{ color_palette.background_hex }};
-  {% else %}
-  --color-primary: #3b82f6;
-  --color-secondary: #1e40af;
-  --color-accent: #06b6d4;
-  --color-background: #f8fafc;
-  {% endif %}
+  --color-primary: {{ palette.primary }};
+  --color-secondary: {{ palette.secondary }};
+  --color-accent: {{ palette.accent }};
+  --color-background: {{ palette.background }};
   
   /* Derived colors for better UX */
   --color-text: color-mix(in oklab, var(--color-background) 10%, #000);
@@ -322,6 +315,22 @@ a:hover {
 .form-textarea {
   resize: vertical;
   min-height: 120px;
+}
+
+.flex-wrap { flex-wrap: wrap; }
+
+.gap-4 { gap: var(--space-md); }
+
+.demo-card {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.footer {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 2rem 0;
+  text-align: center;
 }
 
 /* Utility classes */

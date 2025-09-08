@@ -1,0 +1,72 @@
+// bashvilleapi/codegen/templates/react/src/api.js.j2
+const BASE = "http://localhost:8000/api/blogposts";
+
+const getToken = () => {
+  return localStorage.getItem("auth_token");
+};
+
+const authHeaders = () => {
+  const token = getToken();
+  return token
+  ? { 'Authorization': `Token ${token}`,'Content-Type': 'application/json'}
+  : { 'Content-Type': 'application/json' };
+};
+
+export const api = {
+  list: async () => {
+    const response = await fetch(BASE, { headers: authHeaders() });
+    if (response.status === 401) {
+      window.location.href = '/login';
+      return [];
+    }
+    return response.json();
+  },
+
+  create: async (data) => {
+    const response = await fetch(BASE, {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify(data)
+    });
+    if (response.status === 401) {
+      window.location.href = '/login';
+      throw new Error('Authentication Required');
+    }
+    return response.json();
+  },
+
+  remove: async (id) => {
+    const response = await fetch(`${BASE}/${id}`, {
+      method: "DELETE",
+      headers: authHeaders()
+    });
+    if (response.status === 401) {
+      window.location.href = '/login';
+      throw new Error('Authentication Required');
+    }
+  },
+
+  update: async (id, data) => {
+    const response = await fetch(`${BASE}/${id}`, {
+      method: 'PUT',
+      headers: authHeaders(),
+      body: JSON.stringify(data)
+    });
+    if (response.status === 401) {
+      window.location.href = '/login';
+      throw new Error('Authentication Required');
+    }
+    return response.json();
+  },
+
+  get: async (id) => {
+    const response = await fetch(`${BASE}/${id}`, {
+      headers: authHeaders()
+    });
+    if (response.status === 401) {
+      window.location.href = '/login';
+      throw new Error('Authentication Required');
+    }
+    return response.json();
+  }
+};
