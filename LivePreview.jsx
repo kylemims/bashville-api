@@ -1,16 +1,34 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 
 // Simple Live Preview component that you can add to your existing ColorPaletteForm
 const LivePreview = ({ formData }) => {
+  // Default colors if formData is undefined or missing properties
+  const colors = useMemo(
+    () => ({
+      primary_hex: formData?.primary_hex || "#3b82f6",
+      secondary_hex: formData?.secondary_hex || "#1e40af",
+      accent_hex: formData?.accent_hex || "#06b6d4",
+      background_hex: formData?.background_hex || "#f8fafc",
+      ui_hex: formData?.ui_hex || "#ffffff",
+    }),
+    [
+      formData?.primary_hex,
+      formData?.secondary_hex,
+      formData?.accent_hex,
+      formData?.background_hex,
+      formData?.ui_hex,
+    ]
+  );
+
   useEffect(() => {
     // Update CSS custom properties for live preview
     const root = document.documentElement;
-    if (formData.primary_hex) root.style.setProperty("--preview-primary", formData.primary_hex);
-    if (formData.secondary_hex) root.style.setProperty("--preview-secondary", formData.secondary_hex);
-    if (formData.accent_hex) root.style.setProperty("--preview-accent", formData.accent_hex);
-    if (formData.background_hex) root.style.setProperty("--preview-background", formData.background_hex);
-    if (formData.ui_hex) root.style.setProperty("--preview-ui", formData.ui_hex);
-  }, [formData]);
+    root.style.setProperty("--preview-primary", colors.primary_hex);
+    root.style.setProperty("--preview-secondary", colors.secondary_hex);
+    root.style.setProperty("--preview-accent", colors.accent_hex);
+    root.style.setProperty("--preview-background", colors.background_hex);
+    root.style.setProperty("--preview-ui", colors.ui_hex);
+  }, [colors]);
 
   return (
     <div className="live-preview-container">
@@ -19,15 +37,9 @@ const LivePreview = ({ formData }) => {
         <div className="color-preview-navbar">
           <div className="color-preview-logo">Your Site</div>
           <div className="color-preview-nav-links">
-            <a href="#" className="color-preview-nav-link">
-              Home
-            </a>
-            <a href="#" className="color-preview-nav-link">
-              About
-            </a>
-            <a href="#" className="color-preview-nav-link">
-              Contact
-            </a>
+            <span className="color-preview-nav-link">Home</span>
+            <span className="color-preview-nav-link">About</span>
+            <span className="color-preview-nav-link">Contact</span>
           </div>
         </div>
 
