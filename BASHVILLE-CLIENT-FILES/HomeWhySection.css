@@ -1,0 +1,101 @@
+/* Container */
+.why-wrap {
+  margin: 3rem auto;
+  padding: 0 1rem;
+  max-width: 1200px;
+}
+
+/* Header */
+.why-head {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.why-head h2 {
+  color: var(--color-primary);
+  font-size: 2rem;
+  line-height: 1.2;
+  margin: 0 0 0.5rem;
+  font-weight: 800;
+}
+.why-sub {
+  color: var(--muted);
+  font-size: 1rem;
+  max-width: 52ch;
+  margin: 0 auto;
+}
+
+/* Grid */
+.why-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 720px) {
+  .why-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1080px) {
+  .why-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Card */
+.why-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem;
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 220px;
+}
+.why-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
+  border-color: color-mix(in oklab, var(--border), var(--color-primary) 35%);
+}
+
+.why-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  color: var(--accent-color, var(--color-accent));
+  background: color-mix(in oklab, var(--bg-primary, #0b0f1a), var(--color-accent) 20%);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--border), var(--color-accent) 45%);
+}
+
+.why-title {
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin: 0.25rem 0 0;
+}
+
+.why-blurb {
+  color: var(--text);
+  opacity: 0.9;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  margin: 0;
+  flex: 1;
+}
+
+.why-actions {
+  margin-top: 0.5rem;
+}
+
+/* Bottom CTA row */
+.why-cta-row {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}

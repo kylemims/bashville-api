@@ -1,0 +1,50 @@
+.info-tip {
+  position: relative;
+  display: inline-block;
+}
+.info-tip__button {
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text);
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  line-height: 1.2rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.info-tip__card {
+  position: absolute;
+  top: 2rem;
+  left: 0;
+  width: min(360px, 90vw);
+  background: var(--bg-primary);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  padding: 2rem;
+  z-index: 20;
+}
+.info-tip__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+.info-tip__close {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.info-tip__body {
+  font-size: 0.92rem;
+  line-height: 1.3;
+}
+.info-tip__body code {
+  background: var(--bg-secondary);
+  padding: 1rem;
+  border-radius: 4px;
+}

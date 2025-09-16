@@ -1,0 +1,121 @@
+.color-preview {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.color-preview--xs {
+  gap: 1px;
+}
+
+.color-preview--sm {
+  gap: 2px;
+}
+
+.color-preview--md {
+  gap: 3px;
+}
+
+.color-preview--lg {
+  gap: 4px;
+}
+
+.color-swatch {
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.color-swatch:hover {
+  transform: scale(1.15);
+  z-index: 1;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.color-swatch:active {
+  transform: scale(1.05);
+}
+
+.color-swatch.copied {
+  animation: copyPulse 0.4s ease-out;
+  transform: scale(1.01);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+@keyframes copyPulse {
+  0% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 0 var(--color-primary);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 4px rgba(254, 227, 148, 0.4);
+  }
+  100% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 2px var(--color-primary);
+  }
+}
+
+.color-preview--xs .color-swatch {
+  width: 8px;
+  height: 8px;
+}
+
+.color-preview--sm .color-swatch {
+  width: 12px;
+  height: 12px;
+}
+
+.color-preview--md .color-swatch {
+  width: 16px;
+  height: 16px;
+}
+
+.color-preview--lg .color-swatch {
+  width: 20px;
+  height: 20px;
+}
+
+.color-swatch[style*="#FFFFFF"],
+.color-swatch[style*="#ffffff"],
+.color-swatch[style*="rgb(255, 255, 255)"] {
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+.color-swatch[style*="#F"],
+.color-swatch[style*="#f"] {
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+.color-swatch::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 6px;
+  height: 6px;
+  background: var(--color-accent);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.color-swatch:hover::after {
+  opacity: 0.8;
+}
+
+@media (max-width: 640px) {
+  .color-swatch:hover {
+    transform: scale(1.1);
+  }
+
+  .color-swatch.copied {
+    transform: scale(1.15);
+  }
+}

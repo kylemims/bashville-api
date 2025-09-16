@@ -1,0 +1,338 @@
+.setup-generator-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.setup-generator-modal {
+  background: var(--bg-primary);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  width: 90vw;
+  max-width: 900px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.setup-generator-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 2px solid var(--border);
+  background: var(--bg-secondary);
+  border-radius: 16px 16px 0 0;
+}
+
+.setup-generator-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.setup-generator-tabs {
+  display: flex;
+  background: var(--bg-secondary);
+  border-bottom: 2px solid var(--border);
+  padding: 0;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  border-radius: 0;
+  margin: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-bottom: 3px solid transparent;
+}
+
+.tab-button:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+}
+
+.tab-button.active {
+  background: var(--bg-primary);
+  color: var(--color-primary);
+  border-bottom: 3px solid var(--color-primary);
+}
+
+.setup-generator-content {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-primary);
+}
+
+.file-preview {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.file-header {
+  padding: 1.5rem 2rem;
+  background: var(--bg-primary);
+  border-bottom: 2px solid var(--border);
+}
+
+.file-header h3 {
+  margin: 0 0 0.5rem 0;
+  color: var(--color-primary);
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.file-header p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.file-header code {
+  background: var(--color-accent);
+  color: var(--bg-primary);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.file-actions {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  border-bottom: 2px solid var(--border);
+  background: var(--bg-primary);
+}
+
+.code-preview {
+  flex: 1;
+  overflow: auto;
+  padding: 2rem;
+  background: var(--bg-code, #1a1b26);
+  color: var(--text);
+  font-family: var(--font-mono, "Fira Code", "SF Mono", "Monaco", "Cascadia Code", monospace);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin: 0;
+  border-radius: 0 0 16px 16px;
+  position: relative;
+}
+
+.code-preview::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.code-preview::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.code-preview::-webkit-scrollbar-thumb {
+  background: var(--color-accent);
+  border-radius: 4px;
+}
+
+.code-preview::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+.code-preview code {
+  white-space: pre-wrap;
+  word-break: break-word;
+  display: block;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* Syntax highlighting for bash scripts */
+.code-preview code .comment {
+  color: #565f89;
+  font-style: italic;
+}
+
+.code-preview code .string {
+  color: #9ece6a;
+}
+
+.code-preview code .keyword {
+  color: #bb9af7;
+  font-weight: 600;
+}
+
+.code-preview code .function {
+  color: #7aa2f7;
+}
+
+/* Enhanced action buttons */
+.file-actions .action-button {
+  min-width: 120px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.file-actions .action-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes copySuccess {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.copy-success {
+  animation: copySuccess 0.3s ease-out;
+}
+
+.file-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 2rem;
+  background: var(--bg-tertiary, rgba(254, 227, 148, 0.1));
+  border-left: 4px solid var(--color-accent);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.file-status .status-icon {
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .setup-generator-modal {
+    width: 95vw;
+    max-height: 90vh;
+    margin: 1rem;
+  }
+
+  .setup-generator-header {
+    padding: 1rem 1.5rem;
+  }
+
+  .setup-generator-header h2 {
+    font-size: 1.25rem;
+  }
+
+  .tab-button {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .file-actions {
+    padding: 1rem 1.5rem;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .file-actions .action-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .code-preview {
+    padding: 1.5rem;
+    font-size: 0.8rem;
+  }
+
+  .file-header {
+    padding: 1rem 1.5rem 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .setup-generator-modal {
+    width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+    margin: 0;
+  }
+
+  .setup-generator-header {
+    border-radius: 0;
+  }
+
+  .tab-button {
+    padding: 1rem 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .code-preview {
+    border-radius: 0;
+    padding: 1rem;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .setup-generator-overlay {
+    background: rgba(0, 0, 0, 0.9);
+  }
+
+  .code-preview {
+    background: #0d1117;
+    color: #c9d1d9;
+  }
+}

@@ -1,0 +1,164 @@
+.color-editor {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 8px;
+  margin: 4px 0;
+}
+
+.color-editor-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  /* min-width: 120px; */
+}
+
+.color-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: 2px solid #e5e7eb;
+}
+
+.color-name {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--mutedx);
+  text-transform: capitalize;
+}
+
+.color-editor-input {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.hex-input {
+  padding: 6px 4px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-family: "Fira Code", monospace;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  max-width: 90px;
+}
+
+.hex-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 1px #3b82f6;
+}
+
+.hex-input.error {
+  border-color: #ef4444;
+}
+
+.error-message {
+  color: #ef4444;
+  font-size: 0.75rem;
+  margin-top: 2px;
+}
+
+.color-editor-actions {
+  display: flex;
+  gap: 4px;
+}
+.color-editor {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--color-primary);
+  border-radius: 8px;
+  margin: 4px 0;
+}
+
+/* .color-editor-preview {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 120px;
+}
+
+.color-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: 2px solid var(--border);
+  transition: transform 0.2s ease;
+}
+
+.color-swatch:hover {
+  transform: scale(1.1);
+}
+
+.color-name {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--text);
+  text-transform: capitalize;
+}
+
+.color-editor-input {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.color-editor .color-field {
+  display: flex;
+  gap: 0.5rem;
+  align-items: end;
+  margin: 0;
+}
+
+.color-editor .color-field .form-field {
+  margin-bottom: 0;
+}
+
+.color-editor .color-field .form-field:first-child {
+  flex-shrink: 0;
+  width: 40px;
+}
+
+.color-editor .hex-input {
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: "Fira Code", monospace;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  background: var(--bg-input);
+  color: var(--text);
+}
+
+.color-editor .hex-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.color-editor .hex-input.error {
+  border-color: var(--color-secondary);
+}
+
+.error-message {
+  color: var(--color-secondary);
+  font-size: 0.75rem;
+  margin-top: 2px;
+}
+
+.color-editor-actions {
+  display: flex;
+  gap: 4px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .color-editor {
+    background: var(--bg-primary);
+  }
+} */

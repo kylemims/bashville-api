@@ -1,0 +1,72 @@
+.project-tabs-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem;
+  padding-bottom: 0.5rem;
+}
+
+.project-tabs {
+  display: flex;
+  gap: 0;
+  align-items: center;
+}
+
+.project-tabs-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.add-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(150deg, var(--color-primary), var(--color-secondary));
+  border: none;
+  border-radius: 50px;
+  padding: 0.65rem 1.5rem;
+  color: var(--bg-primary);
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(254, 227, 148, 0.3);
+  transition: all 0.3s ease;
+  margin-right: 1rem;
+}
+
+.add-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(254, 227, 148, 0.4);
+}
+
+.tab-content {
+  min-height: 400px;
+}
+
+@media (max-width: 768px) {
+  .project-tabs-container {
+    /* flex-direction: row-reverse; */
+    gap: 1rem;
+    align-items: stretch;
+  }
+  .add-button {
+    margin-left: 0.5rem;
+  }
+  .project-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    justify-content: center;
+  }
+
+  .project-tabs-actions {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .add-button {
+    width: 100%;
+    justify-content: center;
+  }
+}

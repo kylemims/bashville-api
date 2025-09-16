@@ -1,0 +1,259 @@
+/* Main tab container */
+.commands-tab {
+  display: grid;
+  grid-template-columns: 500px 1fr;
+  /* flex-direction: column; */
+  gap: 2rem;
+}
+
+/* Section containers */
+.section-project,
+.section-stash {
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+}
+
+.section-project {
+  border-color: var(--color-primary);
+  background: var(--bg-secondary);
+  transform: translateY(-1px);
+}
+
+.section-title {
+  color: var(--color-primary);
+  /* font-size: 1.2rem; */
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  /* margin-left: 2rem; */
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.section-title::after {
+  content: "";
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  border-radius: 2px;
+  margin-top: 0.3rem;
+  margin-right: 0.5rem;
+  flex: 1;
+}
+
+.command-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.command-gradient-line {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  border-radius: 2px;
+  margin-top: 0.1rem;
+}
+
+/* Command dropdown */
+.command-dropdown {
+  margin-bottom: 1.5rem;
+}
+
+.dropdown-select {
+  width: 100%;
+  background: var(--bg-input);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: not-allowed;
+}
+
+.dropdown-select:disabled {
+  opacity: 0.6;
+  color: var(--muted);
+}
+
+/* Command list (for project commands) */
+.command-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Available commands grid */
+.available-commands-grid {
+  display: grid;
+  gap: 1rem;
+  /* grid-template-columns: repeat(2, 1fr); */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+/* Auto-span long commands across full width */
+.command-card-available {
+  /* Default: fits in one column */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Long commands get full width */
+.command-card-available.long-command {
+  min-width: 100%;
+  grid-column: 1 / -1;
+  /* background: rgba(254, 227, 148, 0.03); */
+  /* border-left: 1px solid var(--color-primary); */
+  /* order: -1; */
+}
+
+.command-card-available {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.command-card-available:hover {
+  transform: translateY(-1px) scale(1.005);
+}
+
+@media (max-width: 1024px) {
+  .command-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .commands-tab {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .available-commands-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .command-card {
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .command-list {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .available-commands-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  /* In single column, all commands span full width anyway */
+  .command-card-available.long-command {
+    border-left: none;
+    /* background: rgba(254, 227, 148, 0.02); */
+  }
+}
+
+.section {
+  align-items: center;
+  margin: 0 auto;
+}
+
+/* Command card (for available commands selection) */
+.command-card-available:hover {
+  border-color: var(--color-accent);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.command-card.selected {
+  border-color: var(--color-accent);
+  background: rgba(254, 227, 148, 0.8);
+}
+
+.command-card-content {
+  margin-bottom: 0.75rem;
+}
+
+.command-card-content h4 {
+  color: var(--color-primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+}
+
+.command-card-content code {
+  background: var(--bg-input);
+  color: var(--color-accent);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-family: "Fira Code", monospace;
+  display: block;
+}
+
+.command-card-actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 0rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  padding: 0px;
+  margin-left: 10px;
+}
+
+.command-card-actions:hover {
+  opacity: 1;
+}
+
+/* Empty message */
+.empty-message {
+  text-align: center;
+  color: var(--muted);
+  font-style: italic;
+  padding: 2rem;
+  background: var(--bg-primary);
+  border-radius: 6px;
+  border: 1px dashed var(--border);
+}
+
+.available-edit {
+  color: var(--muted);
+}
+.available-delete {
+  color: var(--color-secondary);
+}
+.available-add {
+  color: var(--color-background);
+}
+
+@media (max-width: 768px) {
+  .commands-tab {
+    gap: 1.5rem;
+  }
+
+  .section {
+    padding: 1rem;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .available-commands-grid {
+    grid-template-columns: 1fr;
+  }
+}

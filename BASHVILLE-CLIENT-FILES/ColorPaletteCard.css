@@ -1,0 +1,233 @@
+/* Layout containers for cards */
+.current-palette {
+  margin-bottom: 2rem;
+}
+
+.palette-grid {
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: minmax(min-content, auto);
+  grid-gap: 1rem;
+}
+
+@media (max-width: 1024px) {
+  .palette-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .palette-grid {
+    grid-template-columns: repeat(1, 1fr);
+    grid-gap: 1rem;
+  }
+}
+
+.color-palette-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-primary);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  /* overflow: hidden; */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  /* margin: 0 auto; */
+}
+
+.color-palette-card:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.color-palette-card.selected {
+  border-color: var(--color-primary);
+  background: var(--bg-secondary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(254, 227, 148, 0.2);
+}
+
+.palette-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem 0.75rem;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+}
+
+.palette-name {
+  color: var(--color-primary);
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.palette-actions {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.color-palette-card:hover .palette-actions {
+  opacity: 1;
+}
+
+/* Color banner - the main visual element */
+.color-banner {
+  display: flex;
+  height: 60px;
+  margin: 0;
+}
+
+.color-segment {
+  flex: 1;
+  transition: all 0.2s ease;
+  position: relative;
+  cursor: pointer;
+}
+
+.color-segment:hover {
+  flex: 1.2;
+  z-index: 1;
+}
+
+.color-segment:first-child {
+  border-radius: 0;
+}
+
+.color-segment:last-child {
+  border-radius: 0;
+}
+
+/* Color details grid */
+.color-details {
+  /* padding: 1rem 1.25rem; */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  /* gap: 0.75rem; */
+  background-color: var(--bg-secondary);
+}
+
+.color-detail-item {
+  min-height: 50px;
+}
+
+.color-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.color-info:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.color-info-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.color-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+}
+
+.color-name {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.color-hex {
+  font-family: var(--font-mono, "Fira Code", monospace);
+  font-size: 0.75rem;
+  color: var(--color-accent);
+  margin-left: 1.25rem;
+  opacity: 0.8;
+}
+
+.selection-indicator {
+  top: 0.75rem;
+  left: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: var(--color-primary);
+  color: var(--bg-primary);
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  z-index: 2;
+}
+
+@media (max-width: 640px) {
+  .color-details {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 1rem;
+  }
+
+  .palette-header {
+    padding: 1rem;
+  }
+
+  .color-banner {
+    height: 50px;
+  }
+}
+
+.color-palette-card.selected .palette-header {
+  background: var(--bg-input);
+}
+
+.color-palette-card.selected .palette-name {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.color-details .color-editor {
+  background: var(--bg-secondary);
+  border: 1px solid var(--color-primary);
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.color-details .color-editor .color-swatch {
+  display: none;
+}
+
+.available-edit {
+  font-size: 1rem;
+  cursor: pointer;
+}
+.available-delete {
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.add-palette-tooltip .icon-tooltip-container {
+  position: relative;
+}

@@ -1,0 +1,223 @@
+.action-button {
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-family: inherit;
+}
+
+.action-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.action-button--primary {
+  background: var(--color-primary);
+  color: var(--bg-primary);
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  gap: 0.4rem;
+}
+
+.action-button--primary:hover:not(:disabled) {
+  background: var(--color-accent);
+  transform: translateY(-1px);
+}
+.action-button--accent {
+  background: var(--color-accent);
+  color: var(--bg-primary);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  gap: 0.4rem;
+}
+
+.action-button--accent:hover:not(:disabled) {
+  background: var(--color-primary);
+  transform: translateY(-1px);
+}
+.action-button--secondary {
+  background: var(--color-secondary);
+  color: var(--text);
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  gap: 0.4rem;
+}
+
+.action-button--secondary:hover:not(:disabled) {
+  background: var(--color-accent);
+  transform: translateY(-1px);
+}
+.action-button--muted {
+  background: var(--mutedx);
+  color: var(--text);
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  gap: 0.4rem;
+}
+
+.action-button--muted:hover:not(:disabled) {
+  background: var(--color-primary);
+  transform: translateY(-1px);
+}
+
+.action-button--bgsecondary {
+  background: var(--bg-secondary);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  gap: 0.5rem;
+}
+
+.action-button--bgsecondary:hover:not(:disabled) {
+  background: var(--bg-primary);
+  border-color: var(--color-accent);
+}
+
+.action-button--back {
+  background: var(--bg-secondary);
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.action-button--back:hover:not(:disabled) {
+  background: var(--mutedx);
+  color: var(--color-accent);
+}
+.action-button--clear {
+  background: var(--mutedx);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  min-width: 40px;
+  min-height: 40px;
+  gap: 0.5rem;
+}
+
+.action-button--clear:hover:not(:disabled) {
+  background: var(--mutedx);
+  color: var(--color-accent);
+}
+.action-button--back-secondary {
+  background: var(--bg-secondary);
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.action-button--back-secondary:hover:not(:disabled) {
+  background: var(--mutedx);
+  color: var(--color-secondary);
+}
+.action-button--add-field {
+  background: var(--bg-secondary);
+  color: var(--color-accent);
+  font-size: 1.2rem;
+  gap: 0.2rem;
+}
+
+.action-button--add-field:hover:not(:disabled) {
+  background: var(--color-accent);
+  color: var(--bg-primary);
+}
+
+.action-button--add {
+  background: var(--color-accent);
+  color: var(--bg-primary);
+  border-radius: 10%;
+  width: 30px;
+  height: 30px;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.action-button--add:hover:not(:disabled) {
+  background: var(--color-primary);
+  transform: scale(1.1);
+}
+
+.action-button--tab {
+  background: transparent;
+  color: var(--muted);
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 1rem 1.5rem;
+  font-size: 0.9rem;
+  border-radius: 0;
+}
+
+.action-button--tab:hover:not(:disabled) {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.action-button--tab-active {
+  background: transparent;
+  color: var(--color-primary);
+  border: none;
+  border-bottom: 2px solid var(--color-primary);
+  padding: 1rem 1.5rem;
+  font-size: 0.9rem;
+  border-radius: 0;
+  font-weight: 700;
+}
+
+.action-button--edit,
+.action-button--delete {
+  background: none;
+  border: none;
+  padding: 0.25rem;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  min-width: 28px;
+  min-height: 28px;
+}
+
+.action-button--edit:hover:not(:disabled) {
+  background: rgba(254, 227, 148, 0.2);
+}
+
+.action-button--delete:hover:not(:disabled) {
+  background: rgba(210, 110, 102, 0.2);
+}
+
+.action-button--xs {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.7rem;
+}
+.action-button--sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+}
+
+.action-button--lg {
+  padding: 1rem 2rem;
+  font-size: 1rem;
+}
+
+.action-button--launch {
+  background: none;
+  border: none;
+  padding: 0.25rem;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  min-width: 28px;
+  min-height: 28px;
+}
+
+.action-button--launch:hover:not(:disabled) {
+  background: rgba(70, 203, 167, 0.2);
+}

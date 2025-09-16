@@ -1,0 +1,231 @@
+.fs-wrap {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+}
+
+.fs-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.fs-title {
+  margin: 0;
+  color: var(--color-primary);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  font-size: 1.05rem;
+}
+
+.fs-line {
+  height: 2px;
+  flex: 1;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  border-radius: 2px;
+}
+
+.fs-sub {
+  color: var(--muted);
+  margin: 0 0 1rem 0;
+  line-height: 1.4;
+}
+
+.fs-grid {
+  display: grid;
+  gap: 0.85rem;
+  grid-template-columns: 1fr;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 860px) {
+  .fs-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.fs-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.9rem;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.fs-card:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-1px);
+}
+
+.fs-card-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.4rem;
+}
+
+.fs-icon {
+  color: var(--color-secondary);
+  display: inline-flex;
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 6px;
+}
+
+.fs-card-title {
+  margin: 0;
+  font-weight: 700;
+  color: var(--text);
+  font-size: 1rem;
+}
+
+.fs-card-text {
+  margin: 0;
+  color: var(--text);
+  opacity: 0.9;
+}
+
+.fs-palette {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin: 0.75rem 0 1rem 0;
+}
+
+.fs-chip {
+  width: 26px;
+  height: 14px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+.fs-chip--1 {
+  background: var(--color-primary);
+}
+.fs-chip--2 {
+  background: var(--color-secondary);
+}
+.fs-chip--3 {
+  background: var(--color-accent);
+}
+.fs-chip--4 {
+  background: var(--bg-primary);
+}
+.fs-chip--fade {
+  height: 2px;
+  flex: 1;
+  background: linear-gradient(90deg, var(--color-primary), transparent);
+  border: none;
+  box-shadow: none;
+}
+
+.fs-templates-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.6rem;
+}
+
+.fs-templates-title {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--color-primary);
+  font-weight: 800;
+}
+
+.fs-templates-sub {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.fs-templates-scroller {
+  display: grid;
+  gap: 0.8rem;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(260px, 1fr);
+  overflow-x: auto;
+  padding-bottom: 0.1rem;
+  scroll-snap-type: x proximity;
+}
+
+.fs-tile {
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.9rem;
+  scroll-snap-align: start;
+  min-height: 164px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.fs-tile-top {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.fs-tile-title {
+  margin: 0;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.fs-tile-blurb {
+  margin: 0;
+  color: var(--muted);
+}
+
+.fs-tile-code {
+  margin: 0;
+  background: #0d1117;
+  color: #c9d1d9;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.55rem;
+  max-height: 72px;
+  overflow: auto;
+  font-size: 0.8rem;
+}
+
+.fs-tile-actions {
+  margin-top: auto;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.fs-btn {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.fs-btn:hover {
+  border-color: var(--color-accent);
+}
+
+.fs-btn--primary {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #0b0f1a;
+}
+
+.fs-btn--primary:hover {
+  filter: brightness(1.05);
+}
+
+.fs-btn--ghost {
+  background: transparent;
+}

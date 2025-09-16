@@ -2,14 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom styles with your color palette */
+/* Enhanced styles with your advanced color palette and styling preferences */
 @layer base {
   :root {
+    /* Base color palette */
     --color-primary: {{ color_palette.primary_hex }};
     --color-secondary: {{ color_palette.secondary_hex }};
     --color-accent: {{ color_palette.accent_hex }};
     --color-background: {{ color_palette.background_hex }};
     --color-ui: {{ color_palette.ui_hex }};
+    
+    {% set style_prefs = color_palette.get_style_preferences() %}
+    /* Advanced styling preferences */
+    --border-radius-base: {% if style_prefs.border_radius == 'none' %}0px{% elif style_prefs.border_radius == 'small' %}4px{% elif style_prefs.border_radius == 'medium' %}8px{% elif style_prefs.border_radius == 'large' %}12px{% elif style_prefs.border_radius == 'full' %}50px{% else %}8px{% endif %};
+    --shadow-base: {% if style_prefs.shadows %}0 4px 6px rgba(0, 0, 0, 0.1){% else %}none{% endif %};
+    --transition-hover: {% if style_prefs.animations %}all 0.2s ease{% else %}none{% endif %};
+    --hover-transform: {% if style_prefs.animations %}translateY(-2px){% else %}none{% endif %};
+    
+    /* Component-specific color overrides */
+    {% set overrides = style_prefs.component_overrides %}
+    --color-navbar-bg: {{ overrides.navbar.background or color_palette.ui_hex }};
+    --color-navbar-text: {{ overrides.navbar.text or 'auto' }};
+    --color-cards-bg: {{ overrides.cards.background or color_palette.ui_hex }};
+    --color-cards-border: {{ overrides.cards.border or '#e5e5e5' }};
+    --color-footer-bg: {{ overrides.footer.background or color_palette.ui_hex }};
+    --color-footer-text: {{ overrides.footer.text or 'auto' }};
+    
+    /* Hero button overrides */
+    --color-hero-btn-primary: {{ overrides.hero_buttons.primary or color_palette.primary_hex }};
+    --color-hero-btn-secondary: {{ overrides.hero_buttons.secondary or color_palette.secondary_hex }};
+    --color-hero-btn-accent: {{ overrides.hero_buttons.accent or color_palette.accent_hex }};
+    
+    /* Hero background style */
+    --hero-background: {% if style_prefs.hero_style == 'gradient' %}linear-gradient({{ style_prefs.hero_gradient_direction }}, {{ color_palette.primary_hex }}, {{ color_palette.secondary_hex }}){% else %}{{ color_palette.primary_hex }}{% endif %};
   }
   
   body {
@@ -21,23 +46,151 @@
 }
 
 @layer components {
+  /* Base button styles */
   .btn-primary {
-    @apply bg-primary text-white px-6 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity;
+    @apply px-6 py-3 font-medium transition-all;
+    background-color: var(--color-primary);
+    border-radius: var(--border-radius-base);
+    box-shadow: var(--shadow-base);
+    transition: var(--transition-hover);
+  }
+  
+  .btn-primary:hover {
+    transform: var(--hover-transform);
+    opacity: 0.9;
   }
   
   .btn-secondary {
-    @apply bg-secondary text-white px-6 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity;
+    @apply px-6 py-3 font-medium transition-all;
+    background-color: var(--color-secondary);
+    border-radius: var(--border-radius-base);
+    box-shadow: var(--shadow-base);
+    transition: var(--transition-hover);
+  }
+  
+  .btn-secondary:hover {
+    transform: var(--hover-transform);
+    opacity: 0.9;
   }
   
   .btn-accent {
-    @apply bg-accent text-white px-6 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity;
+    @apply px-6 py-3 font-medium transition-all;
+    background-color: var(--color-accent);
+    border-radius: var(--border-radius-base);
+    box-shadow: var(--shadow-base);
+    transition: var(--transition-hover);
+  }
+  
+  .btn-accent:hover {
+    transform: var(--hover-transform);
+    opacity: 0.9;
+  }
+  
+  /* Hero section with advanced styling */
+  .hero-section {
+    background: var(--hero-background);
+    border-radius: var(--border-radius-base);
+    box-shadow: var(--shadow-base);
+  }
+  
+  /* Hero-specific button overrides */
+  .hero-section .btn-primary {
+    background-color: var(--color-hero-btn-primary);
+  }
+  
+  .hero-section .btn-secondary {
+    background-color: var(--color-hero-btn-secondary);
+  }
+  
+  .hero-section .btn-accent {
+    background-color: var(--color-hero-btn-accent);
+  }
+  
+  /* Cards with advanced styling */
+  .card {
+    background-color: var(--color-cards-bg);
+    border: 1px solid var(--color-cards-border);
+    border-radius: var(--border-radius-base);
+    box-shadow: var(--shadow-base);
+    transition: var(--transition-hover);
+    @apply p-6;
+  }
+  
+  .card:hover {
+    transform: var(--hover-transform);
+  }
+  
+  /* Navigation with override support */
+  .navbar {
+    background-color: var(--color-navbar-bg);
+    border-radius: var(--border-radius-base);
+    box-shadow: var(--shadow-base);
+  }
+  
+  /* Footer with override support */
+  .footer {
+    background-color: var(--color-footer-bg);
+    border-radius: var(--border-radius-base);
+  }
+  
+  /* Container and layout styles */
+  .container-main {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  /* Responsive design helpers */
+  .responsive-grid {
+    @apply grid gap-6;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+  
+  /* Accessibility helpers */
+  .sr-only {
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+  }
+  
+  /* Focus styles for better accessibility */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+    focus-ring-color: var(--color-primary);
+  }
+}
+
+/* Developer-friendly utility classes */
+@layer utilities {
+  .text-auto-contrast {
+    color: color-contrast(var(--color-background) vs black, white);
+  }
+  
+  .bg-primary-subtle {
+    background-color: color-mix(in oklch, var(--color-primary), transparent 80%);
+  }
+  
+  .bg-secondary-subtle {
+    background-color: color-mix(in oklch, var(--color-secondary), transparent 80%);
+  }
+  
+  .bg-accent-subtle {
+    background-color: color-mix(in oklch, var(--color-accent), transparent 80%);
+  }
+}
+
+/* Print styles */
+@media print {
+  .hero-section {
+    background: var(--color-primary) !important;
+    color: white !important;
   }
   
   .card {
-    @apply bg-ui rounded-xl shadow-lg p-6 border border-gray-100;
+    box-shadow: none !important;
+    border: 1px solid #000 !important;
   }
-  
-  .container-main {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* Dark mode compatibility */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --shadow-base: {% if style_prefs.shadows %}0 4px 6px rgba(0, 0, 0, 0.3){% else %}none{% endif %};
   }
 }

@@ -1,0 +1,247 @@
+/* src/components/project/LayoutSelector.css */
+.layout-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.layout-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--color-primary);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+}
+
+.section-subtitle {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.layout-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+/* Layout Cards */
+.layout-card {
+  position: relative;
+  background: var(--bg-primary);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.layout-card:hover:not(.disabled) {
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.layout-card.selected {
+  border-color: var(--color-primary);
+  background: rgba(254, 227, 148, 0.05);
+  box-shadow: 0 4px 20px rgba(254, 227, 148, 0.2);
+}
+
+.layout-card.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Card Header */
+.layout-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.layout-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: var(--bg-primary);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.complexity-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Card Content */
+.layout-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.layout-title {
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.layout-description {
+  color: var(--muted);
+  font-size: 0.875rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.layout-features {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--border);
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.layout-meta {
+  margin-bottom: 0.75rem;
+}
+
+.setup-time {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text);
+  font-size: 0.8rem;
+  line-height: 1.3;
+}
+
+.selected-span-text {
+  color: var(--bg-primary);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.layout-select-indicator {
+  display: flex;
+  gap: 0.25rem;
+  background: var(--color-primary);
+  border-radius: 20px;
+  padding: 0.2rem 1.2rem;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.selection-summary {
+  background: var(--bg-secondary);
+  border: 1px solid var(--color-accent);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.summary-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.summary-content strong {
+  color: var(--color-primary);
+}
+
+@media (max-width: 768px) {
+  .layout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .layout-card {
+    padding: 1.25rem;
+  }
+
+  .section-title {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .layout-selector {
+    gap: 1.5rem;
+  }
+
+  .layout-card {
+    padding: 1rem;
+  }
+
+  .layout-card-header {
+    margin-bottom: 0.75rem;
+  }
+
+  .layout-icon {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+.layout-card:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.layout-card:focus:not(.selected) {
+  border-color: var(--color-accent);
+}

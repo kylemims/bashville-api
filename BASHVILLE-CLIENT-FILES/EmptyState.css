@@ -1,0 +1,32 @@
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: 2rem;
+}
+
+.empty-state-content {
+  text-align: center;
+  max-width: 400px;
+}
+
+.empty-state-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  opacity: 0.6;
+}
+
+.empty-state-title {
+  color: var(--color-primary);
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 0 0 1rem 0;
+}
+
+.empty-state-description {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0 0 2rem 0;
+}
