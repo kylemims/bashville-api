@@ -7,6 +7,7 @@ from bashvilleapi.views import (
     ColorPaletteViewSet,
     ProjectViewSet,
     CommandViewSet,
+    NoteViewSet,
     RegisterView,
     LoginView,
 )
@@ -16,6 +17,7 @@ router = routers.DefaultRouter(trailing_slash=False)
 router.register(r"colorpalettes", ColorPaletteViewSet, basename="colorpalette")
 router.register(r"projects", ProjectViewSet, basename="project")
 router.register(r"commands", CommandViewSet, basename="command")
+router.register(r"notes", NoteViewSet, basename="note")
 
 urlpatterns = [
     path("", include(router.urls)),

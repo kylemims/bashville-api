@@ -5,3 +5,4 @@ from .project import ProjectViewSet
 from .command import CommandViewSet
 from .auth import RegisterView, LoginView
 from .codegen import CodegenGenerateView
+from .note import NoteViewSet
