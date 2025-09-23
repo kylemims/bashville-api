@@ -6,13 +6,16 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('bashvilleapi', '0004_add_ui_color'),
+        ("bashvilleapi", "0004_add_ui_color"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='colorpalette',
-            name='style_preferences',
-            field=models.JSONField(default=dict, help_text='Advanced styling options: gradients, component overrides, layout preferences'),
+            model_name="colorpalette",
+            name="style_preferences",
+            field=models.JSONField(
+                default=dict,
+                help_text="Advanced styling options: gradients, component overrides, layout preferences",
+            ),
         ),
     ]

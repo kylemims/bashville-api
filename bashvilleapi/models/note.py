@@ -57,6 +57,16 @@ class Note(models.Model):
         blank=True,
         help_text="User-defined tags for additional organization",
     )
+    priority_level = models.CharField(
+        max_length=10,
+        choices=[
+            ("low", "Low Priority"),
+            ("medium", "Medium Priority"),
+            ("high", "High Priority"),
+        ],
+        default="medium",
+        help_text="Priority level for organization and visual indicators",
+    )
 
     # Status fields
     is_pinned = models.BooleanField(
