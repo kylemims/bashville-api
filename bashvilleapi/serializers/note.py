@@ -55,6 +55,7 @@ class NoteSerializer(serializers.ModelSerializer):
             "is_pinned",
             "is_code_snippet",
             "is_completed",
+            "order",
             "project",
             "project_title",
             "project_description",

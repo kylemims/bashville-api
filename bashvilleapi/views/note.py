@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Q, Count
 from django.utils import timezone
+from django.db import transaction
 
 from ..models import Note, Project
 from ..serializers import (
@@ -428,6 +429,43 @@ class NoteViewSet(viewsets.ModelViewSet):
             )
 
         return Response({"message": message, "affected_count": count})
+
+    @action(detail=False, methods=["POST"])
+    def bulk_reorder(self, request):
+        """
+        Bulk update note order for drag and drop functionality.
+        Expected payload: {'updates': [{'id': 1, 'order': 0}, {'id': 2, 'order': 1}, ...]}
+        """
+        updates = request.data.get("updates", [])
+
+        if not updates:
+            return Response(
+                {"error": "No updates provided"}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            with transaction.atomic():
+                for update in updates:
+                    note_id = update.get("id")
+                    new_order = update.get("order")
+
+                    if note_id is None or new_order is None:
+                        return Response(
+                            {"error": "Each update must have id and order"},
+                            status=status.HTTP_400_BAD_REQUEST,
+                        )
+
+                    # Update the note order, ensuring user owns the note
+                    Note.objects.filter(id=note_id, user=request.user).update(
+                        order=new_order
+                    )
+
+            return Response({"success": True}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response(
+                {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     @action(detail=False, methods=["get"])
     def recent(self, request):

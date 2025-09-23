@@ -68,7 +68,13 @@ class Note(models.Model):
     is_completed = models.BooleanField(
         default=False, help_text="For todo-type notes, mark as completed"
     )
-
+    order = models.PositiveIntegerField(
+        default=0, help_text="Order for drag and drop sorting within category"
+    )
+    is_important = models.BooleanField(
+        default=False, help_text="Mark note as important"
+    )
+    is_archived = models.BooleanField(default=False, help_text="Archive note")
     # Metadata
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -79,12 +85,13 @@ class Note(models.Model):
     )
 
     class Meta:
-        ordering = ["-is_pinned", "-updated_at"]
+        ordering = ["-is_pinned", "order", "-updated_at"]
         indexes = [
             models.Index(fields=["user", "project"]),
             models.Index(fields=["user", "category"]),
             models.Index(fields=["user", "is_pinned"]),
             models.Index(fields=["created_at"]),
+            models.Index(fields=["user", "order"]),
         ]
 
     def __str__(self):
@@ -219,16 +226,13 @@ class Note(models.Model):
 
     def detect_code_content(self):
         """Detect if content contains code snippets."""
-        if not self.content:
-            return False
-
         if not self.content or not isinstance(self.content, str):
             return False
 
         content = self.content.lower()
 
         # Code block markers
-        if "```" in self.content or "`" in self.content:
+        if "```" in str(self.content) or "`" in str(self.content):
             return True
 
         # Common code patterns
