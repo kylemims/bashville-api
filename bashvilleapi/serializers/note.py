@@ -4,50 +4,37 @@ from ..models import Note
 
 class NoteSerializer(serializers.ModelSerializer):
     """
-    Comprehensive serializer for Note model with smart field handling.
+    Block-based note serializer with smart field handling.
 
-    Features:
-    - Auto-categorization on creation/update
-    - Smart title generation
-    - Project relationship handling
-    - Custom tag management
-    - Read-only computed fields
-    - Validation for content and relationships
+    Key changes from legacy version:
+    - Primary content field is now 'blocks' (JSONField)
+    - 'content' is read-only computed property for backward compatibility
+    - Removed content validation since it's computed from blocks
+    - Added blocks validation for structure integrity
     """
 
     # Read-only computed fields
-    auto_generated_title = serializers.CharField(
-        source="auto_generate_title", read_only=True
+    category_display = serializers.CharField(
+        source="get_category_display", read_only=True
     )
-    auto_detected_category = serializers.CharField(
-        source="auto_detect_category", read_only=True
-    )
-    is_code_detected = serializers.BooleanField(
-        source="detect_code_content", read_only=True
-    )
-    formatted_content = serializers.CharField(read_only=True)
-    age_in_days = serializers.IntegerField(read_only=True)
-    is_recent = serializers.BooleanField(read_only=True)
-
-    # Project relationship with nested data
     project_title = serializers.CharField(source="project.title", read_only=True)
     project_description = serializers.CharField(
         source="project.description", read_only=True
     )
-
-    # User relationship (read-only, set from request)
     user_username = serializers.CharField(source="user.username", read_only=True)
+    age_in_days = serializers.IntegerField(read_only=True)
+    is_recent = serializers.BooleanField(read_only=True)
+    formatted_content = serializers.CharField(read_only=True)
 
-    # Category display name
-    category_display = serializers.CharField(
-        source="get_category_display", read_only=True
-    )
+    # Backward compatibility - content computed from blocks
+    content = serializers.CharField(read_only=True)
 
     class Meta:
         model = Note
         fields = [
             "id",
             "title",
+            "blocks",
             "content",
             "category",
             "category_display",
@@ -65,52 +52,107 @@ class NoteSerializer(serializers.ModelSerializer):
             "user_username",
             "created_at",
             "updated_at",
-            "auto_generated_title",
-            "auto_detected_category",
-            "is_code_detected",
-            "formatted_content",
             "age_in_days",
             "is_recent",
+            "formatted_content",
         ]
         read_only_fields = [
             "id",
             "created_at",
             "updated_at",
-            "search_vector",
             "user_username",
             "project_title",
             "project_description",
             "category_display",
-            "auto_generated_title",
-            "auto_detected_category",
-            "is_code_detected",
-            "formatted_content",
             "age_in_days",
             "is_recent",
+            "formatted_content",
+            "content",
+            "is_code_snippet",
         ]
 
-    def validate_content(self, value):
-        """Validate note content."""
-        if not value or not value.strip():
-            raise serializers.ValidationError("Note content cannot be empty.")
+    def validate_blocks(self, value):
+        """Validate blocks structure and content."""
+        if not isinstance(value, list):
+            raise serializers.ValidationError("Blocks must be a list.")
 
-        if len(value.strip()) < 3:
+        if len(value) > 50:  # Reasonable limit
             raise serializers.ValidationError(
-                "Note content must be at least 3 characters long."
+                "Cannot have more than 50 blocks per note."
             )
 
-        if len(value) > 10000:
-            raise serializers.ValidationError(
-                "Note content cannot exceed 10,000 characters."
-            )
+        # Validate each block structure
+        for i, block in enumerate(value):
+            if not isinstance(block, dict):
+                raise serializers.ValidationError(f"Block {i + 1} must be an object.")
 
-        return value.strip()
+            # Required fields
+            if "type" not in block:
+                raise serializers.ValidationError(
+                    f"Block {i + 1} is missing 'type' field."
+                )
+
+            if "id" not in block:
+                raise serializers.ValidationError(
+                    f"Block {i + 1} is missing 'id' field."
+                )
+
+            block_type = block.get("type")
+
+            # Validate block type
+            if block_type not in ["text", "checklist", "code"]:
+                raise serializers.ValidationError(
+                    f"Block {i + 1} has invalid type '{block_type}'. Must be 'text', 'checklist', or 'code'."
+                )
+
+            # Type-specific validation
+            if block_type == "text":
+                if "content" not in block:
+                    raise serializers.ValidationError(
+                        f"Text block {i + 1} is missing 'content' field."
+                    )
+                if not isinstance(block["content"], str):
+                    raise serializers.ValidationError(
+                        f"Text block {i + 1} content must be a string."
+                    )
+
+            elif block_type == "checklist":
+                if "items" not in block:
+                    raise serializers.ValidationError(
+                        f"Checklist block {i + 1} is missing 'items' field."
+                    )
+                if not isinstance(block["items"], list):
+                    raise serializers.ValidationError(
+                        f"Checklist block {i + 1} items must be a list."
+                    )
+
+                # Validate checklist items
+                for j, item in enumerate(block["items"]):
+                    if not isinstance(item, dict):
+                        raise serializers.ValidationError(
+                            f"Checklist block {i + 1}, item {j + 1} must be an object."
+                        )
+                    if "text" not in item or "completed" not in item:
+                        raise serializers.ValidationError(
+                            f"Checklist block {i + 1}, item {j + 1} must have 'text' and 'completed' fields."
+                        )
+
+            elif block_type == "code":
+                if "content" not in block:
+                    raise serializers.ValidationError(
+                        f"Code block {i + 1} is missing 'content' field."
+                    )
+                if not isinstance(block["content"], str):
+                    raise serializers.ValidationError(
+                        f"Code block {i + 1} content must be a string."
+                    )
+
+        return value
 
     def validate_title(self, value):
         """Validate note title."""
         if value and len(value) > 200:
             raise serializers.ValidationError("Title cannot exceed 200 characters.")
-
         return value.strip() if value else value
 
     def validate_custom_tags(self, value):
@@ -150,22 +192,41 @@ class NoteSerializer(serializers.ModelSerializer):
                     raise serializers.ValidationError(
                         "You can only associate notes with your own projects."
                     )
-
         return value
 
     def validate(self, attrs):
         """Cross-field validation."""
-        # If no title provided and content exists, auto-generate will handle it
-        content = attrs.get("content", "")
+        blocks = attrs.get("blocks", [])
         title = attrs.get("title", "")
 
-        # If both title and content are empty, that's an error
-        if not title and not content:
+        # Must have either title or non-empty blocks
+        has_content = bool(title.strip()) if title else False
+        has_blocks = bool(blocks) and any(
+            self._block_has_content(block) for block in blocks
+        )
+
+        if not has_content and not has_blocks:
             raise serializers.ValidationError(
-                "Either title or content must be provided."
+                "Note must have either a title or content blocks."
             )
 
         return attrs
+
+    def _block_has_content(self, block):
+        """Check if a block has meaningful content."""
+        block_type = block.get("type", "")
+
+        if block_type == "text":
+            return bool(block.get("content", "").strip())
+        elif block_type == "checklist":
+            items = block.get("items", [])
+            return len(items) > 0 and any(
+                item.get("text", "").strip() for item in items
+            )
+        elif block_type == "code":
+            return bool(block.get("content", "").strip())
+
+        return False
 
     def create(self, validated_data):
         """Create note with user assignment."""
@@ -182,21 +243,18 @@ class NoteSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         """Update note with smart field handling."""
         # Store old values for comparison
-        old_content = instance.content
+        old_blocks = instance.blocks
         old_category = instance.category
 
         # Update the instance
         instance = super().update(instance, validated_data)
 
-        # If content changed significantly, allow re-categorization
-        new_content = validated_data.get("content", old_content)
-        if (
-            new_content != old_content
-            and old_category == instance.auto_detect_category()
-        ):
-            # Content changed and category wasn't manually overridden
+        # If blocks changed significantly and category wasn't manually set, re-categorize
+        new_blocks = validated_data.get("blocks", old_blocks)
+        if new_blocks != old_blocks and old_category == instance.auto_detect_category():
+            # Blocks changed and category wasn't manually overridden
             instance.category = instance.auto_detect_category()
-            instance.save()
+            instance.save(update_fields=["category"])
 
         return instance
 
@@ -204,17 +262,22 @@ class NoteSerializer(serializers.ModelSerializer):
         """Customize the serialized representation."""
         data = super().to_representation(instance)
 
-        # Add preview for long content
-        if data["content"] and len(data["content"]) > 200:
-            data["content_preview"] = data["content"][:197] + "..."
+        # Add content preview for long content
+        full_content = data.get("content", "")
+        if full_content and len(full_content) > 200:
+            data["content_preview"] = full_content[:197] + "..."
         else:
-            data["content_preview"] = data["content"]
+            data["content_preview"] = full_content
+
+        # Add block count for quick reference
+        blocks = data.get("blocks", [])
+        data["block_count"] = len(blocks)
 
         # Add note statistics
         data["stats"] = {
-            "character_count": len(data["content"]) if data["content"] else 0,
-            "word_count": len(data["content"].split()) if data["content"] else 0,
-            "line_count": len(data["content"].split("\n")) if data["content"] else 0,
+            "character_count": len(full_content) if full_content else 0,
+            "word_count": len(full_content.split()) if full_content else 0,
+            "block_count": len(blocks),
         }
 
         # Add quick actions info
@@ -228,19 +291,21 @@ class NoteSerializer(serializers.ModelSerializer):
 
 
 class NoteListSerializer(serializers.ModelSerializer):
-    """Lightweight serializer for note lists with full content."""
+    """Lightweight serializer for note lists."""
 
     project_title = serializers.CharField(source="project.title", read_only=True)
     category_display = serializers.CharField(
         source="get_category_display", read_only=True
     )
     age_in_days = serializers.IntegerField(read_only=True)
+    content = serializers.CharField(read_only=True)  # For preview
 
     class Meta:
         model = Note
         fields = [
             "id",
             "title",
+            "blocks",
             "content",
             "category",
             "category_display",
@@ -259,37 +324,60 @@ class NoteListSerializer(serializers.ModelSerializer):
         ]
 
 
-class NoteStatsSerializer(serializers.Serializer):
-    """Serializer for note statistics and analytics."""
-
-    total_notes = serializers.IntegerField()
-    notes_by_category = serializers.DictField()
-    notes_by_project = serializers.DictField()
-    pinned_count = serializers.IntegerField()
-    recent_count = serializers.IntegerField()
-    completed_todos = serializers.IntegerField()
-    pending_todos = serializers.IntegerField()
-    code_snippets = serializers.IntegerField()
-    popular_tags = serializers.ListField()
-
-
 class QuickNoteSerializer(serializers.ModelSerializer):
-    """Ultra-minimal serializer for quick note creation."""
+    """Simplified serializer for quick note creation with blocks."""
 
     class Meta:
         model = Note
-        fields = ["content", "project"]
+        fields = ["blocks", "title", "project", "category"]
 
-    def validate_content(self, value):
-        """Quick validation for content."""
-        if not value or not value.strip():
-            raise serializers.ValidationError("Content required.")
-        return value.strip()
+    def validate_blocks(self, value):
+        """Quick validation for blocks."""
+        if not value:
+            raise serializers.ValidationError("Blocks required for note creation.")
+
+        # Just ensure it's a list - detailed validation happens in main serializer
+        if not isinstance(value, list):
+            raise serializers.ValidationError("Blocks must be a list.")
+
+        return value
 
     def create(self, validated_data):
-        """Quick create with minimal processing."""
+        """Quick create with user assignment."""
         request = self.context.get("request")
         if request and hasattr(request, "user"):
             validated_data["user"] = request.user
 
         return super().create(validated_data)
+
+
+class NoteStatsSerializer(serializers.Serializer):
+    """Enhanced serializer for comprehensive note analytics."""
+
+    # Core metrics
+    total_notes = serializers.IntegerField()
+    completed_notes = serializers.IntegerField()
+    important_notes = serializers.IntegerField()
+    archived_notes = serializers.IntegerField()
+    pinned_count = serializers.IntegerField()
+    recent_count = serializers.IntegerField()
+    code_snippets = serializers.IntegerField()
+
+    # Category and priority breakdowns
+    category_breakdown = serializers.DictField()
+    notes_by_category = serializers.DictField()  # Legacy support
+    notes_by_project = serializers.DictField()
+    notes_by_priority = serializers.DictField()
+
+    # Todo analytics
+    completed_todos = serializers.IntegerField()
+    pending_todos = serializers.IntegerField()
+
+    # Enhanced analytics
+    productivity_score = serializers.FloatField()
+    recent_activity = serializers.DictField()
+    popular_tags = serializers.ListField()
+    block_stats = serializers.DictField()
+
+    # Performance insights
+    insights = serializers.ListField()
